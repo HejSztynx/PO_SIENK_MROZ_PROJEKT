@@ -1,4 +1,4 @@
-package app.model;
+package agh.proj.model;
 
 import java.util.Objects;
 
