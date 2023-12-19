@@ -20,6 +20,10 @@ public class Animal implements WorldElement {
         currentOrientationIndex = -1;
     }
 
+    public Animal(Vector2d position, Parameters worldParameters) {
+        this(position, Genotype.randomGenotype(worldParameters.genotypeLength), worldParameters);
+    }
+
     public Vector2d getPosition() {
         return position;
     }

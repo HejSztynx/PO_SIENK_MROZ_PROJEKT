@@ -105,4 +105,13 @@ public class Genotype {
         genotype[pickedGens[1]] = genotype[pickedGens[0]];
         genotype[pickedGens[0]] = temp;
     }
+
+    public static Genotype randomGenotype(int genotypeLength) {
+        Random random = new Random();
+        int[] genotype = new int[genotypeLength];
+        for (int i = 0; i < genotypeLength; i++) {
+            genotype[i] = random.nextInt(8);
+        }
+        return new Genotype(genotype);
+    }
 }
