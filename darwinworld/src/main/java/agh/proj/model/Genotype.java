@@ -1,12 +1,9 @@
 package agh.proj.model;
 
-import agh.proj.model.variants.MutationVariant;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class Genotype {
     private final int[] genotype;

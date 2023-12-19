@@ -15,7 +15,7 @@ public class World {
         Parameters parameters = new Parameters(10, 10, MapVariant.GLOBE,
                 20, 5, 5, FoliageVariant.VERDANT_EQUATOR,
                 5, 50, 10, 10,
-                0, 1, MutationVariant.SWAP, 5, BehaviorVariant.FULL_PREDESTINATION);
+                0, 1, MutationVariant.FULLY_RANDOM, 5, BehaviorVariant.FULL_PREDESTINATION);
 
         Animal animal1 = new Animal(new Vector2d(0, 0), new Genotype(new int[]{0, 2, 3, 5, 6}), parameters);
         System.out.println(animal1);

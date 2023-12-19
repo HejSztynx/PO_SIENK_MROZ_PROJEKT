@@ -1,11 +1,14 @@
 package agh.proj.model;
 
-public class Animal {
+import agh.proj.model.interfaces.WorldElement;
+
+public class Animal implements WorldElement {
     private final Parameters worldParameters;
     private Vector2d position;
     private MapDirection orientation;
     private int currentOrientationIndex;
     private int energy;
+    private int age = 0;
     private final Genotype genotype;
 
     public Animal(Vector2d position, Genotype genotype, Parameters worldParameters) {
@@ -20,6 +23,9 @@ public class Animal {
     public Vector2d getPosition() {
         return position;
     }
+    public void setPosition(Vector2d position) {
+        this.position = position;
+    }
 
     public int getEnergy() {
         return energy;
@@ -29,9 +35,6 @@ public class Animal {
         return genotype;
     }
 
-    public void setPosition(Vector2d position) {
-        this.position = position;
-    }
 
     public void setOrientation(MapDirection orientation) {
         this.orientation = orientation;
@@ -39,12 +42,12 @@ public class Animal {
 
     @Override
     public String toString() {
-        return genotype + " --- " + position + " --- " + orientation + " --- ENERGY = " + energy;
+        return genotype + " --- " + position + " --- " + orientation + " --- ENERGY = " + energy + " --- AGE = " + age;
     }
 
     public void move() {
-        currentOrientationIndex++;
-        currentOrientationIndex %= genotype.getLength();
+        age++;
+        currentOrientationIndex = age % genotype.getLength();
         setOrientation(MapDirection.getOrientations()[genotype.getRawGenotype()[currentOrientationIndex]]);
         setPosition(orientation.transform(position));
         energy--;
