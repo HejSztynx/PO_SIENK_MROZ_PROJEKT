@@ -9,6 +9,7 @@ public class Animal implements WorldElement {
     private int currentOrientationIndex;
     private int energy;
     private int age = 0;
+    private int noOfChilds = 0;
     private final Genotype genotype;
 
     public Animal(Vector2d position, Genotype genotype, Parameters worldParameters) {
@@ -33,6 +34,14 @@ public class Animal implements WorldElement {
 
     public int getEnergy() {
         return energy;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public int getChildNo() {
+        return noOfChilds;
     }
 
     public Genotype getGenotype() {
@@ -62,11 +71,17 @@ public class Animal implements WorldElement {
         energy += worldParameters.consumedPlantEnergy;
     }
 
+    public void getsChild() {
+        noOfChilds++;
+    }
+
     public boolean canBreed() {
         return energy >= worldParameters.breedNeededEnergy;
     }
 
     public static Animal breed(Animal animal1, Animal animal2) {
+        animal1.getsChild();
+        animal2,getsChild();
         return new Animal(animal1.getPosition(), Genotype.cross(animal1, animal2, animal1.worldParameters), animal1.worldParameters);
     }
 }
