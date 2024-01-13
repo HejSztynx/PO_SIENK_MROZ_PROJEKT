@@ -6,6 +6,4 @@ public interface WorldElement {
     Vector2d getPosition();
 
     void setPosition(Vector2d position);
-
-    void move();
 }

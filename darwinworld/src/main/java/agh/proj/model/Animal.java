@@ -1,5 +1,6 @@
 package agh.proj.model;
 
+import agh.proj.model.interfaces.MoveValidator;
 import agh.proj.model.interfaces.WorldElement;
 
 public class Animal implements WorldElement {
@@ -9,7 +10,7 @@ public class Animal implements WorldElement {
     private int currentOrientationIndex;
     private int energy;
     private int age = 0;
-    private int noOfChilds = 0;
+    private int noOfChildren = 0;
     private final Genotype genotype;
 
     public Animal(Vector2d position, Genotype genotype, Parameters worldParameters) {
@@ -40,29 +41,40 @@ public class Animal implements WorldElement {
         return age;
     }
 
-    public int getChildNo() {
-        return noOfChilds;
+    public int getChildrenNo() {
+        return noOfChildren;
     }
 
     public Genotype getGenotype() {
         return genotype;
     }
 
+    public MapDirection getOrientation() {
+        return orientation;
+    }
 
     public void setOrientation(MapDirection orientation) {
         this.orientation = orientation;
     }
 
-    @Override
-    public String toString() {
+    public String longToString() {
         return genotype + " --- " + position + " --- " + orientation + " --- ENERGY = " + energy + " --- AGE = " + age;
     }
 
-    public void move() {
-        age++;
+    @Override
+    public String toString() {
+        return "A";
+    }
+
+    public void move(MoveValidator moveValidator) {
         currentOrientationIndex = age % genotype.getLength();
-        setOrientation(MapDirection.getOrientations()[genotype.getRawGenotype()[currentOrientationIndex]]);
-        setPosition(orientation.transform(position));
+        int orientationChange = genotype.getRawGenotype()[currentOrientationIndex];
+        int newOrientation = (orientation.toNumber() + orientationChange) % 8;
+        setOrientation(MapDirection.getOrientations()[newOrientation]);
+
+        setPosition(moveValidator.moveValidator(this, orientation.transform(position)));
+
+        age++;
         energy--;
         System.out.println(this);
     }
@@ -72,7 +84,7 @@ public class Animal implements WorldElement {
     }
 
     public void getsChild() {
-        noOfChilds++;
+        noOfChildren++;
     }
 
     public boolean canBreed() {
@@ -81,7 +93,7 @@ public class Animal implements WorldElement {
 
     public static Animal breed(Animal animal1, Animal animal2) {
         animal1.getsChild();
-        animal2,getsChild();
+        animal2.getsChild();
         return new Animal(animal1.getPosition(), Genotype.cross(animal1, animal2, animal1.worldParameters), animal1.worldParameters);
     }
 }

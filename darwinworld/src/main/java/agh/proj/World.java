@@ -1,9 +1,8 @@
 package agh.proj;
 
-import agh.proj.model.Animal;
-import agh.proj.model.Genotype;
-import agh.proj.model.Parameters;
-import agh.proj.model.Vector2d;
+import agh.proj.model.*;
+import agh.proj.model.interfaces.WorldMap;
+import agh.proj.model.util.MapVisualizer;
 import agh.proj.model.variants.BehaviorVariant;
 import agh.proj.model.variants.FoliageVariant;
 import agh.proj.model.variants.MapVariant;
@@ -17,18 +16,31 @@ public class World {
                 5, 50, 10, 10,
                 0, 1, MutationVariant.FULLY_RANDOM, 5, BehaviorVariant.FULL_PREDESTINATION);
 
-        Animal animal1 = new Animal(new Vector2d(0, 0), new Genotype(new int[]{0, 2, 3, 5, 6}), parameters);
+        Animal animal1 = new Animal(new Vector2d(1, 1), new Genotype(new int[]{0, 1, 0, 0, 0}), parameters);
         System.out.println(animal1);
 
-        for(int i = 0; i < 40; i++) {
-            if (i == 5) animal1.eat();
-            animal1.move();
+        WorldMap map = new Globe(5, 5);
+        MapVisualizer mapVisualizer = new MapVisualizer(map);
+        System.out.println(mapVisualizer.draw());
+
+        map.place(animal1, animal1.getPosition());
+        System.out.println(mapVisualizer.draw());
+
+        for (int i = 0; i < 5; i++) {
+            map.move(animal1);
+            System.out.println(mapVisualizer.draw());
         }
 
-        Animal animal2 = new Animal(new Vector2d(0, 0), new Genotype(new int[]{4, 3, 2, 1, 0}), parameters);
-        if (animal2.canBreed() && animal1.canBreed()) {
-            Animal child = Animal.breed(animal1, animal2);
-            System.out.println("-------------\n--- CHILD ---\n" + child);
-        }
+//        for(int i = 0; i < 6; i++) {
+//            if (i == 5) animal1.eat();
+//            animal1.move(map);
+//            System.out.println(animal1.getPosition());
+//        }
+
+//        Animal animal2 = new Animal(new Vector2d(0, 0), new Genotype(new int[]{4, 3, 2, 1, 0}), parameters);
+//        if (animal2.canBreed() && animal1.canBreed()) {
+//            Animal child = Animal.breed(animal1, animal2);
+//            System.out.println("-------------\n--- CHILD ---\n" + child);
+//        }
     }
 }
