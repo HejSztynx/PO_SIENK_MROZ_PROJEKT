@@ -19,7 +19,7 @@ public class World {
         Animal animal1 = new Animal(new Vector2d(1, 1), new Genotype(new int[]{0, 1, 0, 0, 0}), parameters.getInitialEnergy(), 1);
         System.out.println(animal1);
 
-        WorldMap map = new Globe(5, 5);
+        WorldMap map = new Globe(5, 5,true);
         MapVisualizer mapVisualizer = new MapVisualizer(map);
         System.out.println(mapVisualizer.draw());
 

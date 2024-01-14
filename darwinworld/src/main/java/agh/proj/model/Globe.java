@@ -5,18 +5,37 @@ import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Globe implements WorldMap, BoundsValidator {
     private final Vector2d lowerLeft = new Vector2d(0, 0);
     private final Vector2d upperRight;
-
+    private final Map<String,Biome> biomes = new HashMap<>();
     private final Map<Vector2d, Animal> animals = new HashMap<>();
 
-    public Globe(int width, int height) {
+    public Globe(int width, int height,boolean haveSwamp) {
         upperRight = new Vector2d(width, height);
+        generateJungle();
+        if(haveSwamp)
+            generateSwamp();
     }
-
+    private void generateJungle(){
+        int jungleHeight = upperRight.getY()/5;
+        int jungleWidth = upperRight.getX()/5;
+        Biome jungle=new Biome(new Vector2d((upperRight.getX()-jungleWidth)/2, (upperRight.getY()-jungleHeight)/2 ),new Vector2d((upperRight.getX()-jungleWidth)/2+jungleWidth, (upperRight.getY()-jungleHeight)/2+jungleHeight ));
+        biomes.put("Jungle",jungle);
+    }
+    private void generateSwamp(){
+        Random random=new Random();
+        int startWidth=random.nextInt(0,(upperRight.getX()*4)/5);
+        int startHeight=random.nextInt(0,(upperRight.getY()*4)/5);
+        int swampHeight = upperRight.getY()/5;
+        int swampWidth = upperRight.getX()/5;
+        Biome jungle=new Biome(new Vector2d(startWidth, startHeight),new Vector2d(startWidth+swampWidth, startHeight+swampHeight ));
+        biomes.put("Swamp",jungle);
+    }
     @Override
     public boolean boundsValidator(Vector2d position) {
         int x = position.getX();
