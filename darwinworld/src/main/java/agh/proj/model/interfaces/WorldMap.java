@@ -5,11 +5,13 @@ import agh.proj.model.MapDirection;
 import agh.proj.model.Vector2d;
 
 public interface WorldMap extends MoveValidator {
+    Vector2d moveValidator(WorldElement element, Vector2d newPosition);
+
     WorldElement objectAt(Vector2d position);
 
     void move(Animal animal);
 
-    void place(Animal animal, Vector2d position);
+    void place(WorldElement element, Vector2d position);
 
     boolean isOccupied(Vector2d position);
 
