@@ -6,22 +6,22 @@ import agh.proj.model.variants.BehaviorVariant;
 import agh.proj.model.variants.FoliageVariant;
 
 public class Parameters {
-    final int mapHeight;
-    final int mapWidth;
-    final MapVariant mapVariant;
-    final int initialPlantsQuantity;
-    final int consumedPlantEnergy;
-    final int plantsGrowingADa;
-    final FoliageVariant foliageVariant;
-    final int initialAnimalsNumber;
-    final int initialEnergy;
-    final int breedNeededEnergy;
-    final int breedLostEnergy;
-    final int minMutations;
-    final int maxMutations;
-    final MutationVariant mutationVariant;
-    final int genotypeLength;
-    final BehaviorVariant behaviorVariant;
+    public final int mapHeight;
+    public final int mapWidth;
+    public final MapVariant mapVariant;
+    public final int initialPlantsQuantity;
+    public final int consumedPlantEnergy;
+    public final int plantsGrowingADa;
+    public final FoliageVariant foliageVariant;
+    public final int initialAnimalsNumber;
+    public final int initialEnergy;
+    public final int breedNeededEnergy;
+    public final int breedLostEnergy;
+    public final int minMutations;
+    public final int maxMutations;
+    public final MutationVariant mutationVariant;
+    public final int genotypeLength;
+    public final BehaviorVariant behaviorVariant;
 
     public Parameters(int mapHeight, int mapWidth, MapVariant mapVariant, int initialPlantsQuantity,
                       int consumedPlantEnergy, int plantsGrowingADa, FoliageVariant foliageVariant, int initialAnimalsNumber,

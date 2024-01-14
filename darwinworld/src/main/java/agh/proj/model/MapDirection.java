@@ -18,7 +18,7 @@ public enum MapDirection {
     }
 
     private Vector2d toVector() {
-        return switch(this) {
+        return switch (this) {
             case NORTH -> new Vector2d(0, 1);
             case NORTH_EAST -> new Vector2d(1, 1);
             case EAST -> new Vector2d(1, 0);
@@ -31,7 +31,7 @@ public enum MapDirection {
     }
 
     public int toNumber() {
-        return switch(this) {
+        return switch (this) {
             case NORTH -> 0;
             case NORTH_EAST -> 1;
             case EAST -> 2;
