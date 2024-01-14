@@ -6,22 +6,84 @@ import agh.proj.model.variants.BehaviorVariant;
 import agh.proj.model.variants.FoliageVariant;
 
 public class Parameters {
-    public final int mapHeight;
-    public final int mapWidth;
-    public final MapVariant mapVariant;
-    public final int initialPlantsQuantity;
-    public final int consumedPlantEnergy;
-    public final int plantsGrowingADa;
-    public final FoliageVariant foliageVariant;
-    public final int initialAnimalsNumber;
-    public final int initialEnergy;
-    public final int breedNeededEnergy;
-    public final int breedLostEnergy;
-    public final int minMutations;
-    public final int maxMutations;
-    public final MutationVariant mutationVariant;
-    public final int genotypeLength;
-    public final BehaviorVariant behaviorVariant;
+
+    private final int mapHeight;
+    private final int mapWidth;
+    private final MapVariant mapVariant;
+    private final int initialPlantsQuantity;
+    private final int consumedPlantEnergy;
+    private final int plantsGrowingADa;
+    private final FoliageVariant foliageVariant;
+    private final int initialAnimalsNumber;
+    private final int initialEnergy;
+    private final int breedNeededEnergy;
+    private final int breedLostEnergy;
+    private final int minMutations;
+    private final int maxMutations;
+    private final MutationVariant mutationVariant;
+    private final int genotypeLength;
+    private final BehaviorVariant behaviorVariant;
+    public int getMapHeight() {
+        return mapHeight;
+    }
+    public BehaviorVariant getBehaviorVariant() {
+        return behaviorVariant;
+    }
+    public int getMapWidth() {
+        return mapWidth;
+    }
+    public int getInitialEnergy() {
+        return initialEnergy;
+    }
+
+    public MapVariant getMapVariant() {
+        return mapVariant;
+    }
+
+    public int getInitialPlantsQuantity() {
+        return initialPlantsQuantity;
+    }
+
+    public int getConsumedPlantEnergy() {
+        return consumedPlantEnergy;
+    }
+
+    public int getPlantsGrowingADa() {
+        return plantsGrowingADa;
+    }
+
+    public FoliageVariant getFoliageVariant() {
+        return foliageVariant;
+    }
+
+    public int getInitialAnimalsNumber() {
+        return initialAnimalsNumber;
+    }
+
+    public int getBreedNeededEnergy() {
+        return breedNeededEnergy;
+    }
+
+    public int getBreedLostEnergy() {
+        return breedLostEnergy;
+    }
+
+    public int getMinMutations() {
+        return minMutations;
+    }
+
+    public int getMaxMutations() {
+        return maxMutations;
+    }
+
+    public MutationVariant getMutationVariant() {
+        return mutationVariant;
+    }
+
+    public int getGenotypeLength() {
+        return genotypeLength;
+    }
+
 
     public Parameters(int mapHeight, int mapWidth, MapVariant mapVariant, int initialPlantsQuantity,
                       int consumedPlantEnergy, int plantsGrowingADa, FoliageVariant foliageVariant, int initialAnimalsNumber,
@@ -44,4 +106,6 @@ public class Parameters {
         this.genotypeLength = genotypeLength;
         this.behaviorVariant = behaviorVariant;
     }
+
+
 }

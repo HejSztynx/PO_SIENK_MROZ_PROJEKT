@@ -16,7 +16,7 @@ public class World {
                 5, 50, 10, 10,
                 0, 1, MutationVariant.FULLY_RANDOM, 5, BehaviorVariant.FULL_PREDESTINATION);
 
-        Animal animal1 = new Animal(new Vector2d(1, 1), new Genotype(new int[]{0, 1, 0, 0, 0}), parameters.initialEnergy, 1);
+        Animal animal1 = new Animal(new Vector2d(1, 1), new Genotype(new int[]{0, 1, 0, 0, 0}), parameters.getInitialEnergy(), 1);
         System.out.println(animal1);
 
         WorldMap map = new Globe(5, 5);
