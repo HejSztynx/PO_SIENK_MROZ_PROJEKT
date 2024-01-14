@@ -26,7 +26,7 @@ public class World {
         map.place(animal1, animal1.getPosition());
         System.out.println(mapVisualizer.draw());
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 40; i++) {
             map.move(animal1);
             System.out.println(mapVisualizer.draw());
         }
