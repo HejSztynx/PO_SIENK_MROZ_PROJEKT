@@ -1,6 +1,7 @@
 package agh.proj.model.util;
 
 import agh.proj.model.Animal;
+
 import java.util.Comparator;
 import java.util.Random;
 
