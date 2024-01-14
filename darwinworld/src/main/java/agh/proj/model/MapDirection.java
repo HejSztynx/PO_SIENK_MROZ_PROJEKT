@@ -42,6 +42,18 @@ public enum MapDirection {
             case NORTH_WEST -> 7;
         };
     }
+    public String toString(){
+        return  switch (this){
+            case NORTH -> "⭡";
+            case NORTH_EAST -> "⭧";
+            case EAST -> "⭢";
+            case SOUTH_EAST -> "⭨";
+            case SOUTH -> "⭣";
+            case SOUTH_WEST -> "⭩";
+            case WEST -> "⭠";
+            case NORTH_WEST -> "⭦";
+        };
+    }
 
     public Vector2d transform(Vector2d position) {
         return position.add(this.toVector());

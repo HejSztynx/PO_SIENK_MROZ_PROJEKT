@@ -69,10 +69,18 @@ public class Globe implements WorldMap, BoundsValidator {
 
         if (y == -1) {
             y = 0;
-            animal.setOrientation(MapDirection.getOrientations()[(animal.getOrientation().toNumber()+2)%8]);
+            switch (animal.getOrientation()){
+                case SOUTH -> animal.setOrientation(MapDirection.NORTH);
+                case SOUTH_EAST -> animal.setOrientation(MapDirection.NORTH_EAST);
+                case SOUTH_WEST -> animal.setOrientation(MapDirection.NORTH_WEST);
+            }
         } else if (y == upperRight.getY() + 1) {
             y = upperRight.getY();
-            animal.setOrientation(MapDirection.getOrientations()[(animal.getOrientation().toNumber()+2)%8]);
+            switch (animal.getOrientation()){
+                case NORTH-> animal.setOrientation(MapDirection.SOUTH);
+                case NORTH_EAST -> animal.setOrientation(MapDirection.SOUTH_EAST);
+                case NORTH_WEST -> animal.setOrientation(MapDirection.SOUTH_WEST);
+            }
         }
         return new Vector2d(x, y);
     }

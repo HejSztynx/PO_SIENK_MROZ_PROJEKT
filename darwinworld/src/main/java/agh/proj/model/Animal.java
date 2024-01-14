@@ -61,7 +61,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return "A";
+        return "A"+orientation.toString();
     }
 
     public void move(MoveValidator moveValidator) {
