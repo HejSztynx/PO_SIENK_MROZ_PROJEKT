@@ -1,5 +1,6 @@
 package agh.proj.model.variants;
 
 public enum MapVariant {
-    GLOBE
+    GLOBE,
+    SWAMP
 }
