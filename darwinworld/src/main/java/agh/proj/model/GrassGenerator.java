@@ -10,8 +10,8 @@ public class GrassGenerator {
         int checker=chancePlains;
         if(inJungle)
             checker=chanceJungle;
-        if(random.nextInt(0,100)<checker){
-            if(random.nextInt(0,100)<perOfBeingBad)
+        if(random.nextInt(100)<checker){
+            if(random.nextInt(100)<perOfBeingBad)
                 return new Grass(-1*Energy,position);
             else
                 return new Grass(Energy,position);
