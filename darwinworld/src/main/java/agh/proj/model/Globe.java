@@ -3,38 +3,142 @@ package agh.proj.model;
 import agh.proj.model.interfaces.BoundsValidator;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
+import agh.proj.model.util.AnimalComparator;
+import agh.proj.model.variants.MapVariant;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
+import static java.lang.Math.sqrt;
 
 public class Globe implements WorldMap, BoundsValidator {
     private final Vector2d lowerLeft = new Vector2d(0, 0);
+    private int day=0;
     private final Vector2d upperRight;
     private final Map<String,Biome> biomes = new HashMap<>();
-    private final Map<Vector2d, Animal> animals = new HashMap<>();
-
-    public Globe(int width, int height,boolean haveSwamp) {
+    private Map<Vector2d,List<Animal>> animals = new HashMap<>();
+    private final Map<Vector2d, Grass> grasses = new HashMap<>();
+    public void addDay(){
+        day++;
+    }
+    private void initialAnimalMap(){
+        for(int i=0;i<upperRight.getY()+1;i++){
+            for(int j=0;j<upperRight.getX()+1;j++) {
+                animals.put(new Vector2d(j,i),new ArrayList<Animal>());
+            }
+        }
+    }
+    private final Parameters parameters;
+    public Globe(int width, int height,Parameters parameters) {
         upperRight = new Vector2d(width, height);
+        this.parameters=parameters;
         generateJungle();
-        if(haveSwamp)
+        if(parameters.getMapVariant()== MapVariant.SWAMP)
             generateSwamp();
+        initialGrassGenerator();
+        initialAnimalMap();
+        initialAnimalsGenerator();
     }
     private void generateJungle(){
-        int jungleHeight = upperRight.getY()/5;
-        int jungleWidth = upperRight.getX()/5;
+        int jungleHeight = (int) (upperRight.getY()/sqrt(5));
+        int jungleWidth = (int) (upperRight.getX()/sqrt(5));
         Biome jungle=new Biome(new Vector2d((upperRight.getX()-jungleWidth)/2, (upperRight.getY()-jungleHeight)/2 ),new Vector2d((upperRight.getX()-jungleWidth)/2+jungleWidth, (upperRight.getY()-jungleHeight)/2+jungleHeight ));
         biomes.put("Jungle",jungle);
     }
     private void generateSwamp(){
         Random random=new Random();
-        int startWidth=random.nextInt(0,(upperRight.getX()*4)/5);
-        int startHeight=random.nextInt(0,(upperRight.getY()*4)/5);
-        int swampHeight = upperRight.getY()/5;
-        int swampWidth = upperRight.getX()/5;
+        int startWidth=random.nextInt(0, (int) ((upperRight.getX()*4)/sqrt(5)));
+        int startHeight=random.nextInt(0,(int) ((upperRight.getY()*4)/sqrt(5)));
+        int swampHeight = (int) (upperRight.getY()/sqrt(5));
+        int swampWidth = (int) (upperRight.getX()/sqrt(5));
         Biome jungle=new Biome(new Vector2d(startWidth, startHeight),new Vector2d(startWidth+swampWidth, startHeight+swampHeight ));
         biomes.put("Swamp",jungle);
+    }
+    private void initialGrassGenerator(){
+        Random random=new Random();
+        for(int i=0;i< parameters.getInitialPlantsQuantity();){
+            Vector2d position=new Vector2d(random.nextInt(upperRight.getX()),random.nextInt(upperRight.getY()));
+            Grass grass=new Grass(parameters.getConsumedPlantEnergy(),position);
+            if(grasses.get(position)==null) {
+                grasses.put(position, grass);
+                i++;
+            }
+        }
+    }
+    public void dayGrassGenerator(){
+        GrassGenerator generator=new GrassGenerator();
+        int grassCount=0;
+        for(int i=0;i<upperRight.getY()+1;i++){
+            for(int j=0;j<upperRight.getX()+1;j++)
+            {
+                Vector2d position=new Vector2d(j,i);
+                Grass grass=generator.generateGrass( biomes.get("Jungle").boundsValidator(position),50,parameters.getConsumedPlantEnergy(),position);
+                if(grass.getEnergy()!=0)
+                {
+                    grasses.putIfAbsent(position, grass);
+                    grassCount++;
+                }
+                if(grassCount> parameters.getPlantsGrowingADay())
+                    return;
+                else if (i==upperRight.getY()) {
+                    i=0;
+                }
+            }
+        }
+    }
+    private void initialAnimalsGenerator(){
+        Random random=new Random();
+        for(int i=0;i<parameters.getInitialAnimalsNumber();i++){
+            Vector2d position=new Vector2d(random.nextInt(upperRight.getX()),random.nextInt(upperRight.getY()));
+            Animal animal=new Animal(position,parameters.getInitialEnergy(),parameters.getGenotypeLength());
+            animals.get(position).add(animal);
+        }
+    }
+    public void dayMovesAnimal(){
+        List<Animal> tmpListOfAll=new ArrayList<>();
+        for (Map.Entry<Vector2d,List<Animal>> entry:animals.entrySet())
+        {
+            Vector2d key=entry.getKey();
+            List<Animal> values=entry.getValue();
+            tmpListOfAll.addAll(values);
+
+        }
+        for (int i=0;i<tmpListOfAll.size();i++){
+            move(tmpListOfAll.get(i));
+        }
+    }
+    public void dayEating(){
+        for (Map.Entry<Vector2d,List<Animal>> entry:animals.entrySet())
+        {
+            Vector2d key=entry.getKey();
+            List<Animal> values=entry.getValue();
+            if(grasses.get(key)!=null && values.size()>0){
+                Collections.sort(values,new AnimalComparator());
+                //System.out.println(values+"->"+grasses.get(key).getEnergy()+"->");
+                values.get(0).eat(grasses.get(key));
+                grasses.remove(key);
+                //System.out.println(values);
+            }
+        }
+    }
+    public void dayClener(){
+
+    }
+    public void dayBreading(){
+        for (Map.Entry<Vector2d,List<Animal>> entry:animals.entrySet())
+        {
+            Vector2d key=entry.getKey();
+            List<Animal> values=entry.getValue();
+            if(values.size()>1){
+                Collections.sort(values,new AnimalComparator());
+                Animal animal1=values.get(0);
+                Animal animal2=values.get(1);
+                if(animal1.canBreed(parameters.getBreedNeededEnergy()) && animal2.canBreed(parameters.getBreedNeededEnergy())){
+                    Animal newAnimal=Animal.breed(animal1,animal2, parameters.getBreedLostEnergy(), parameters.getMutationVariant(), parameters.getMinMutations(), parameters.getMaxMutations());
+                    place(newAnimal,newAnimal.getPosition());
+                    System.out.println(values+"->"+key);
+                }
+            }
+        }
     }
     @Override
     public boolean boundsValidator(Vector2d position) {
@@ -42,12 +146,6 @@ public class Globe implements WorldMap, BoundsValidator {
         int y = position.getY();
         return y >= 0 && y < upperRight.getY() && x >= 0 && x < upperRight.getX();
     }
-
-    @Override
-    public Vector2d moveValidator(WorldElement element, Vector2d newPosition) {
-        return null;
-    }
-
     @Override
     public Vector2d getBounds() {
         return upperRight;
@@ -88,7 +186,12 @@ public class Globe implements WorldMap, BoundsValidator {
 
     @Override
     public WorldElement objectAt(Vector2d position) {
-        return animals.get(position);
+        if(animals.get(position)!=null)
+        {
+            if(animals.get(position).size()!=0)
+                return animals.get(position).get(0);
+        }
+        return grasses.get(position);
     }
 
     @Override
@@ -98,16 +201,20 @@ public class Globe implements WorldMap, BoundsValidator {
 
     @Override
     public void move(Animal animal) {
-        animals.remove(animal.getPosition());
+        animals.get(animal.getPosition()).remove(animal);
         animal.move(this);
-        animals.put(animal.getPosition(), animal);
+        animals.get(animal.getPosition()).add(animal);
     }
 
 
-    //To jest do poprawy musimy wtawiać elemtent bno wstawiamy też grassy a po co nam do tego osobna funkcja chyba że zrobimy place animal i place grass
+    //Ogólnie tej funcki nie potrzebujemy bo nic nie placujemy
     @Override
-    public void place(WorldElement element, Vector2d position) {
-        if (boundsValidator(position)) animals.put(position, (Animal) element);
+    public void place(Animal animal, Vector2d position) {
+        if (boundsValidator(position))
+        {
+
+            animals.get(position).add((Animal) animal);
+        }
         else System.out.println("CANNOT PLACE AT " + position);
     }
 }
