@@ -12,7 +12,7 @@ public class Parameters {
     private final MapVariant mapVariant;
     private final int initialPlantsQuantity;
     private final int consumedPlantEnergy;
-    private final int plantsGrowingADa;
+    private final int plantsGrowingADay;
     private final FoliageVariant foliageVariant;
     private final int initialAnimalsNumber;
     private final int initialEnergy;
@@ -48,8 +48,8 @@ public class Parameters {
         return consumedPlantEnergy;
     }
 
-    public int getPlantsGrowingADa() {
-        return plantsGrowingADa;
+    public int getPlantsGrowingADay() {
+        return plantsGrowingADay;
     }
 
     public FoliageVariant getFoliageVariant() {
@@ -86,7 +86,7 @@ public class Parameters {
 
 
     public Parameters(int mapHeight, int mapWidth, MapVariant mapVariant, int initialPlantsQuantity,
-                      int consumedPlantEnergy, int plantsGrowingADa, FoliageVariant foliageVariant, int initialAnimalsNumber,
+                      int consumedPlantEnergy, int plantsGrowingADay, FoliageVariant foliageVariant, int initialAnimalsNumber,
                       int initialEnergy, int breedNeededEnergy, int breedLostEnergy, int minMutations,
                       int maxMutations, MutationVariant mutationVariant, int genotypeLength, BehaviorVariant behaviorVariant) {
         this.mapHeight = mapHeight;
@@ -94,7 +94,7 @@ public class Parameters {
         this.mapVariant = mapVariant;
         this.initialPlantsQuantity = initialPlantsQuantity;
         this.consumedPlantEnergy = consumedPlantEnergy;
-        this.plantsGrowingADa = plantsGrowingADa;
+        this.plantsGrowingADay = plantsGrowingADay;
         this.foliageVariant = foliageVariant;
         this.initialAnimalsNumber = initialAnimalsNumber;
         this.initialEnergy = initialEnergy;
