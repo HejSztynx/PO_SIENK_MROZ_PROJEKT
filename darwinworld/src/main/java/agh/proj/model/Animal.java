@@ -55,13 +55,9 @@ public class Animal implements WorldElement {
         this.orientation = orientation;
     }
 
-    public String longToString() {
-        return genotype + " --- " + position + " --- " + orientation + " --- ENERGY = " + energy + " --- AGE = " + age;
-    }
-
     @Override
     public String toString() {
-        return "A"+orientation.toString();
+        return orientation.toString()+":"+energy+":"+age;
     }
 
     public void move(MoveValidator moveValidator) {
@@ -74,7 +70,7 @@ public class Animal implements WorldElement {
 
         age++;
         energy--;
-        System.out.println(this);
+        //System.out.println(this);
     }
 
     public void eat(Grass grass) {
