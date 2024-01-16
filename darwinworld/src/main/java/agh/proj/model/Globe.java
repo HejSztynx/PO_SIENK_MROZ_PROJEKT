@@ -208,7 +208,7 @@ public class Globe implements WorldMap, BoundsValidator {
             }
         }
     }
-    public void dayClaener(){
+    public void dayCleaner(){
         List<Animal> tmpList=new ArrayList<>();
         for (Map.Entry<Vector2d,List<Animal>> entry:animals.entrySet())
         {

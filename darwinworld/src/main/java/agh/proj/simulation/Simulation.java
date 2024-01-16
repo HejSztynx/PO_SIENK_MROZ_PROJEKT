@@ -1,8 +1,6 @@
 package agh.proj.simulation;
 
 import agh.proj.model.Globe;
-import agh.proj.model.Parameters;
-import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.MapVisualizer;
 
 public class Simulation implements Runnable {
@@ -16,7 +14,7 @@ public class Simulation implements Runnable {
     public void run() {
         while(worldMap.allDead()!=0)
         {
-            worldMap.dayClaener();
+            worldMap.dayCleaner();
             worldMap.dayMovesAnimal();
             worldMap.dayEating();
             worldMap.dayBreading();

@@ -1,5 +1,6 @@
 package agh.proj;
 
+import agh.proj.gui.Menu;
 import agh.proj.model.*;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.MapVisualizer;
@@ -8,10 +9,14 @@ import agh.proj.model.variants.FoliageVariant;
 import agh.proj.model.variants.MapVariant;
 import agh.proj.model.variants.MutationVariant;
 import agh.proj.simulation.Simulation;
+import javafx.application.Application;
 
 public class World {
     public static void main(String[] args) {
         System.out.println("Hello World!");
+
+        Application.launch(Menu.class, args);
+
         Parameters parameters = new Parameters(10, 10, MapVariant.GLOBE,
                 0, 1, 2, FoliageVariant.VERDANT_EQUATOR,
                 10, 10, 50, 40,
