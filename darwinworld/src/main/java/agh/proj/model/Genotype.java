@@ -1,5 +1,7 @@
 package agh.proj.model;
 
+import agh.proj.model.variants.MutationVariant;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,14 +29,13 @@ public class Genotype {
         return Arrays.toString(genotype);
     }
 
-    public static Genotype cross(Animal animal1, Animal animal2, Parameters worldParameters) {
+    public static Genotype cross(Animal animal1, Animal animal2, MutationVariant mutationVariant,int minMutations,int maxMutations) {
         Animal animalStrong;
         Animal animalWeak;
         if (animal1.getEnergy() >= animal2.getEnergy()) {
             animalStrong = animal1;
             animalWeak = animal2;
-        }
-        else {
+        } else {
             animalStrong = animal2;
             animalWeak = animal1;
         }
@@ -62,19 +63,17 @@ public class Genotype {
             newGenotype[i] = genotypes[1][i];
             i++;
         }
-        return new Genotype(mutate(newGenotype, worldParameters));
+        return new Genotype(mutate(newGenotype, mutationVariant,minMutations,maxMutations));
     }
 
-    private static int[] mutate(int[] genotype, Parameters worldParameters) {
-        return switch(worldParameters.mutationVariant) {
-            case FULLY_RANDOM -> mutateRandom(genotype, worldParameters);
-            case SWAP -> mutateSwap(genotype, worldParameters);
+    private static int[] mutate(int[] genotype, MutationVariant mutationVariant,int minMutations,int maxMutations) {
+        return switch (mutationVariant) {
+            case FULLY_RANDOM -> mutateRandom(genotype,minMutations,maxMutations);
+            case SWAP -> mutateSwap(genotype,minMutations,maxMutations);
         };
     }
 
-    private static int[] mutateRandom(int[] genotype, Parameters worldParameters) {
-        int minMutations = worldParameters.minMutations;
-        int maxMutations = worldParameters.maxMutations;
+    private static int[] mutateRandom(int[] genotype,int minMutations,int maxMutations) {
         Random random = new Random();
         int numberOfMutations = random.nextInt(minMutations, maxMutations + 1);
         ArrayList<Integer> list = new ArrayList<>();
@@ -87,9 +86,7 @@ public class Genotype {
         return genotype;
     }
 
-    private static int[] mutateSwap(int[] genotype, Parameters worldParameters) {
-        int minMutations = worldParameters.minMutations;
-        int maxMutations = worldParameters.maxMutations;
+    private static int[] mutateSwap(int[] genotype,int minMutations,int maxMutations) {
         Random random = new Random();
         int numberOfMutations = random.nextInt(minMutations, maxMutations + 1);
         for (int i = 0; i < numberOfMutations; i++) swapRandomTwo(genotype);

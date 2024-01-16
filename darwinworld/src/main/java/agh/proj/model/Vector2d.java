@@ -9,10 +9,12 @@ public class Vector2d {
         this.x = x;
         this.y = y;
     }
-    public int get_x() {
+
+    public int getX() {
         return x;
     }
-    public int get_y() {
+
+    public int getY() {
         return y;
     }
 
