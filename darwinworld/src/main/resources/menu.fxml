@@ -47,15 +47,15 @@
                     <VBox spacing="10">
                         <VBox>
                             <Label>Initial number of grass</Label>
-                            <TextField fx:id = "grassNumber"/>
+                            <TextField fx:id = "initialPlantsQuantity"/>
                         </VBox>
                         <VBox>
                             <Label>Grass energy</Label>
-                            <TextField fx:id = "grassEnergy"/>
+                            <TextField fx:id = "consumedPlantEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Grass growing each day</Label>
-                            <TextField fx:id = "grassGrowth"/>
+                            <TextField fx:id = "plantsGrowingADay"/>
                         </VBox>
                         <VBox>
                             <Label>Foliage variant</Label>
@@ -82,19 +82,19 @@
                     <VBox spacing="10">
                         <VBox>
                             <Label>Initial number of animals</Label>
-                            <TextField fx:id = "animalNumber"/>
+                            <TextField fx:id = "initialAnimalsNumber"/>
                         </VBox>
                         <VBox>
                             <Label>Initial energy of animals</Label>
-                            <TextField fx:id = "animalEnergy"/>
+                            <TextField fx:id = "initialEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Energy needed for breeding</Label>
-                            <TextField fx:id = "breedEnergyNeeded"/>
+                            <TextField fx:id = "breedNeededEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Energy lost when breeding</Label>
-                            <TextField fx:id = "breedEnergyLost"/>
+                            <TextField fx:id = "breedLostEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Behavior variant</Label>
@@ -135,7 +135,7 @@
                         </VBox>
                         <VBox>
                             <Label>Genome length</Label>
-                            <TextField fx:id = "genomeLength"/>
+                            <TextField fx:id = "genotypeLength"/>
                         </VBox>
                     </VBox>
                 </HBox>

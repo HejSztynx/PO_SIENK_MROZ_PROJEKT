@@ -2,10 +2,6 @@ package agh.proj.gui;
 
 import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
-import agh.proj.model.variants.BehaviorVariant;
-import agh.proj.model.variants.FoliageVariant;
-import agh.proj.model.variants.MapVariant;
-import agh.proj.model.variants.MutationVariant;
 import agh.proj.simulation.Simulation;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -22,21 +18,21 @@ public class SimulationPresenter {
     @FXML
     private ComboBox<String> mapVariant;
     @FXML
-    private TextField grassNumber;
+    private TextField initialPlantsQuantity;
     @FXML
-    private TextField grassEnergy;
+    private TextField consumedPlantEnergy;
     @FXML
-    private TextField grassGrowth;
+    private TextField plantsGrowingADay;
     @FXML
     private ComboBox<String> foliageVariant;
     @FXML
-    private TextField animalNumber;
+    private TextField initialAnimalsNumber;
     @FXML
-    private TextField animalEnergy;
+    private TextField initialEnergy;
     @FXML
-    private TextField breedEnergyNeeded;
+    private TextField breedNeededEnergy;
     @FXML
-    private TextField breedEnergyLost;
+    private TextField breedLostEnergy;
     @FXML
     private ComboBox<String> behaviorVariant;
     @FXML
@@ -46,14 +42,14 @@ public class SimulationPresenter {
     @FXML
     private ComboBox<String> mutationVariant;
     @FXML
-    private TextField genomeLength;
+    private TextField genotypeLength;
 
     private ArrayList<String> textFields= new ArrayList<>();
 
     public void onSimulationStartClicked() {
         textFields.clear();
-        textFields.addAll(List.of(mapHeight.getText(), mapWidth.getText(), grassNumber.getText(), grassEnergy.getText(), grassGrowth.getText(),
-                animalNumber.getText(), animalEnergy.getText(), breedEnergyNeeded.getText(), breedEnergyLost.getText(), minMutations.getText(), maxMutations.getText(), genomeLength.getText()));
+        textFields.addAll(List.of(mapHeight.getText(), mapWidth.getText(), initialPlantsQuantity.getText(), consumedPlantEnergy.getText(), plantsGrowingADay.getText(),
+                initialAnimalsNumber.getText(), initialEnergy.getText(), breedNeededEnergy.getText(), breedLostEnergy.getText(), minMutations.getText(), maxMutations.getText(), genotypeLength.getText()));
 
         ArrayList<Integer> result = checkParameters(textFields);
         if (!result.isEmpty()) {
