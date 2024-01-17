@@ -3,15 +3,27 @@ package agh.proj.gui;
 import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
 import agh.proj.model.util.CSVParameterSaver;
+import agh.proj.model.util.CSVReader;
 import agh.proj.simulation.Simulation;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationPresenter {
+    private static String FIRST_CSV_LINE = "preset,mapHeight,mapWidth,mapVariant,initialPlantsQuantity," +
+            "consumedPlantEnergy,plantsGrowingADay,foliageVariant,initialAnimalsNumber,initialEnergy," +
+            "breedNeededEnergy,breedLostEnergy,minMutations,maxMutations,mutationVariant,genotypeLength,behaviorVariant";
+    private final String projectDirectory = System.getProperty("user.dir");
+    private final String presetsFileLocation = projectDirectory + "/presets/presets.csv";
+
     @FXML
     private TextField mapHeight;
     @FXML
@@ -45,7 +57,51 @@ public class SimulationPresenter {
     @FXML
     private TextField genotypeLength;
 
+    @FXML
+    private ComboBox<String> presets;
+
     private final ArrayList<String> values = new ArrayList<>();
+
+    public void initialize() {
+        initializeCSVDirectory();
+
+        CSVReader csvReader = new CSVReader();
+        ArrayList<String> presetNames = new ArrayList<>();
+        presetNames.add("Custom");
+        presetNames.addAll(csvReader.readFirstColumn(presetsFileLocation));
+        presets.setItems(FXCollections.observableArrayList(presetNames));
+        presets.setValue("Custom");
+    }
+
+    private void initializeCSVDirectory() {
+        String CSVDirectoryURL = projectDirectory + "/presets";
+
+        try {
+            Path directory = Paths.get(CSVDirectoryURL);
+            Path file = Paths.get(presetsFileLocation);
+
+            if (!Files.exists(file)) {
+                Files.createDirectories(directory);
+                Files.createFile(file);
+                initializeCSVFile(presetsFileLocation);
+                System.out.println("Katalog i plik zostały utworzone (jeśli nie istniały).");
+            } else {
+                System.out.println("Plik już istnieje.");
+            }
+        } catch (IOException e) {
+            System.err.println("Błąd podczas tworzenia katalogu i pliku: " + e.getMessage());
+        }
+    }
+
+    private void initializeCSVFile(String url) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(url))) {
+//            writer.newLine();
+            writer.write(FIRST_CSV_LINE);
+//                System.out.println("ZAPISALEM");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void initializeValues() {
         values.clear();
@@ -72,7 +128,7 @@ public class SimulationPresenter {
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
             CSVParameterSaver saver = new CSVParameterSaver();
-            saver.save(values);
+            saver.save(values, presetsFileLocation);
         } else System.out.println("NIE GIT");
 
     }

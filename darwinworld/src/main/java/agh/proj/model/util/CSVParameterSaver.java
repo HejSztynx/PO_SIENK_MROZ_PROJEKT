@@ -9,58 +9,26 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class CSVParameterSaver {
-    public void save(ArrayList<String> values) {
-        URL url = getClass().getClassLoader().getResource("presets.csv");
-
+    public void save(ArrayList<String> values, String url) {
         if (url != null) {
             int lineCount = 0;
 
-            try (LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(url.getFile()))) {
+            try (LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(url))) {
                 lineNumberReader.skip(Long.MAX_VALUE);
                 lineCount = lineNumberReader.getLineNumber();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("LINIE " + lineCount);
-            System.out.println(url);
 
-//            try {
-//                // Zapis do folderu użytkownika (zmień ścieżkę zgodnie z własnymi potrzebami)
-//                Path userHomePath = Paths.get(System.getProperty("user.home"));
-//                Path filePath = userHomePath.resolve("presets.csv");
-//
-//                try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
-//                    StringBuilder sb = new StringBuilder();
-//                    sb.append("preset ").append(lineCount).append(",");
-//                    for (String value : values) {
-//                        sb.append(value).append(",");
-//                    }
-//                    sb.deleteCharAt(sb.length() - 1);
-//                    System.out.println("ZAPISUJE");
-//                    writer.write(sb.toString());
-//                    writer.newLine();
-//                    System.out.println("ZAPISALEM");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.err.println("File not found");
-//        }
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(url.getFile(), true))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(url, true))) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("preset ").append(lineCount).append(",");
                 for (String value : values) {
                     sb.append(value).append(",");
                 }
                 sb.deleteCharAt(sb.length() - 1);
-                System.out.println("ZAPISUJE");
                 writer.newLine();
                 writer.write(sb.toString());
-                System.out.println("ZAPISALEM");
             } catch (IOException e) {
                 e.printStackTrace();
             }

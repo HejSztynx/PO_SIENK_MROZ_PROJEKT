@@ -10,8 +10,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
             minHeight="700.0" minWidth="500.0"
             fx:controller="agh.proj.gui.SimulationPresenter">
 
@@ -23,23 +23,36 @@
                 <HBox spacing="20" alignment="CENTER">
                     <VBox spacing="10">
                         <VBox>
+                            <Label>Saved presets</Label>
+                            <ComboBox fx:id="presets">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Custom"/>
+                                    </FXCollections>
+                                </items>
+                                <value>
+                                    <String fx:value="Custom"/>
+                                </value>
+                            </ComboBox>
+                        </VBox>
+                        <VBox>
                             <Label>Map height</Label>
-                            <TextField fx:id = "mapHeight"/>
+                            <TextField fx:id="mapHeight"/>
                         </VBox>
                         <VBox>
                             <Label>Map width</Label>
-                            <TextField fx:id = "mapWidth"/>
+                            <TextField fx:id="mapWidth"/>
                         </VBox>
                         <VBox>
                             <Label>Map variant</Label>
                             <ComboBox fx:id="mapVariant">
                                 <items>
-                                    <FXCollections fx:factory = "observableArrayList">
-                                        <String fx:value = "Globe"/>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Globe"/>
                                     </FXCollections>
                                 </items>
                                 <value>
-                                    <String fx:value = "Globe"/>
+                                    <String fx:value="Globe"/>
                                 </value>
                             </ComboBox>
                         </VBox>
@@ -47,27 +60,27 @@
                     <VBox spacing="10">
                         <VBox>
                             <Label>Initial number of grass</Label>
-                            <TextField fx:id = "initialPlantsQuantity"/>
+                            <TextField fx:id="initialPlantsQuantity"/>
                         </VBox>
                         <VBox>
                             <Label>Grass energy</Label>
-                            <TextField fx:id = "consumedPlantEnergy"/>
+                            <TextField fx:id="consumedPlantEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Grass growing each day</Label>
-                            <TextField fx:id = "plantsGrowingADay"/>
+                            <TextField fx:id="plantsGrowingADay"/>
                         </VBox>
                         <VBox>
                             <Label>Foliage variant</Label>
                             <ComboBox fx:id="foliageVariant">
                                 <items>
-                                    <FXCollections fx:factory = "observableArrayList">
-                                        <String fx:value = "Verdant Equator"/>
-                                        <String fx:value = "Poisonous Plants"/>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Verdant Equator"/>
+                                        <String fx:value="Poisonous Plants"/>
                                     </FXCollections>
                                 </items>
                                 <value>
-                                    <String fx:value = "Verdant Equator"/>
+                                    <String fx:value="Verdant Equator"/>
                                 </value>
                             </ComboBox>
 
@@ -82,30 +95,30 @@
                     <VBox spacing="10">
                         <VBox>
                             <Label>Initial number of animals</Label>
-                            <TextField fx:id = "initialAnimalsNumber"/>
+                            <TextField fx:id="initialAnimalsNumber"/>
                         </VBox>
                         <VBox>
                             <Label>Initial energy of animals</Label>
-                            <TextField fx:id = "initialEnergy"/>
+                            <TextField fx:id="initialEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Energy needed for breeding</Label>
-                            <TextField fx:id = "breedNeededEnergy"/>
+                            <TextField fx:id="breedNeededEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Energy lost when breeding</Label>
-                            <TextField fx:id = "breedLostEnergy"/>
+                            <TextField fx:id="breedLostEnergy"/>
                         </VBox>
                         <VBox>
                             <Label>Behavior variant</Label>
                             <ComboBox fx:id="behaviorVariant">
                                 <items>
-                                    <FXCollections fx:factory = "observableArrayList">
-                                        <String fx:value = "Full Predestination"/>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Full Predestination"/>
                                     </FXCollections>
                                 </items>
                                 <value>
-                                    <String fx:value = "Full Predestination"/>
+                                    <String fx:value="Full Predestination"/>
                                 </value>
                             </ComboBox>
                         </VBox>
@@ -113,38 +126,38 @@
                     <VBox spacing="10">
                         <VBox>
                             <Label>Minimum number of mutations</Label>
-                            <TextField fx:id = "minMutations"/>
+                            <TextField fx:id="minMutations"/>
                         </VBox>
                         <VBox>
                             <Label>Maximum number of mutations</Label>
-                            <TextField fx:id = "maxMutations"/>
+                            <TextField fx:id="maxMutations"/>
                         </VBox>
                         <VBox>
                             <Label>Mutation variant</Label>
                             <ComboBox fx:id="mutationVariant">
                                 <items>
-                                    <FXCollections fx:factory = "observableArrayList">
-                                        <String fx:value = "Fully Random"/>
-                                        <String fx:value = "Swap"/>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Fully Random"/>
+                                        <String fx:value="Swap"/>
                                     </FXCollections>
                                 </items>
                                 <value>
-                                    <String fx:value = "Fully Random"/>
+                                    <String fx:value="Fully Random"/>
                                 </value>
                             </ComboBox>
                         </VBox>
                         <VBox>
                             <Label>Genome length</Label>
-                            <TextField fx:id = "genotypeLength"/>
+                            <TextField fx:id="genotypeLength"/>
                         </VBox>
                     </VBox>
                 </HBox>
             </VBox>
-            <VBox alignment = "CENTER" spacing = "10">
+            <VBox alignment="CENTER" spacing="10">
                 <Label/>
-                <VBox spacing = "10" alignment = "CENTER">
-                    <Button onAction = "#onSavePresetsClicked">SAVE PRESET</Button>
-                    <Button onAction = "#onSimulationStartClicked">RUN</Button>
+                <VBox spacing="10" alignment="CENTER">
+                    <Button onAction="#onSavePresetsClicked">SAVE PRESET</Button>
+                    <Button onAction="#onSimulationStartClicked">RUN</Button>
                 </VBox>
 
             </VBox>

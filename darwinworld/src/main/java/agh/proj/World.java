@@ -13,7 +13,7 @@ public class World {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        Application.launch(SimulationApp.class, args);
+        Application.launch(SimulationApp.class);
 
         Parameters parameters = new Parameters(10, 10, MapVariant.GLOBE,
                 0, 1, 2, FoliageVariant.VERDANT_EQUATOR,
