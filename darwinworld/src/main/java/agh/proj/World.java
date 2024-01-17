@@ -1,9 +1,7 @@
 package agh.proj;
 
-import agh.proj.gui.Menu;
+import agh.proj.gui.SimulationApp;
 import agh.proj.model.*;
-import agh.proj.model.interfaces.WorldMap;
-import agh.proj.model.util.MapVisualizer;
 import agh.proj.model.variants.BehaviorVariant;
 import agh.proj.model.variants.FoliageVariant;
 import agh.proj.model.variants.MapVariant;
@@ -15,7 +13,7 @@ public class World {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        Application.launch(Menu.class, args);
+        Application.launch(SimulationApp.class, args);
 
         Parameters parameters = new Parameters(10, 10, MapVariant.GLOBE,
                 0, 1, 2, FoliageVariant.VERDANT_EQUATOR,
@@ -25,9 +23,12 @@ public class World {
         //Animal animal1 = new Animal(new Vector2d(1, 1), new Genotype(new int[]{0, 1, 0, 0, 0}), parameters.getInitialEnergy(), 1);
         //System.out.println(animal1);
 
-        Globe map = new Globe(5, 5,parameters);
-        Simulation simulation=new Simulation(map);
+        Globe map = new Globe(5, 5, parameters);
+        Simulation simulation = new Simulation(map);
         simulation.run();
+
+
+
 //        MapVisualizer mapVisualizer = new MapVisualizer(map);
 //        System.out.println(mapVisualizer.draw());
 //

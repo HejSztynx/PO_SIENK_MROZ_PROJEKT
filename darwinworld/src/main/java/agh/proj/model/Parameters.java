@@ -6,7 +6,6 @@ import agh.proj.model.variants.BehaviorVariant;
 import agh.proj.model.variants.FoliageVariant;
 
 public class Parameters {
-
     private final int mapHeight;
     private final int mapWidth;
     private final MapVariant mapVariant;
@@ -23,15 +22,41 @@ public class Parameters {
     private final MutationVariant mutationVariant;
     private final int genotypeLength;
     private final BehaviorVariant behaviorVariant;
+
+    public Parameters(int mapHeight, int mapWidth, MapVariant mapVariant, int initialPlantsQuantity,
+                      int consumedPlantEnergy, int plantsGrowingADay, FoliageVariant foliageVariant, int initialAnimalsNumber,
+                      int initialEnergy, int breedNeededEnergy, int breedLostEnergy, int minMutations,
+                      int maxMutations, MutationVariant mutationVariant, int genotypeLength, BehaviorVariant behaviorVariant) {
+        this.mapHeight = mapHeight;
+        this.mapWidth = mapWidth;
+        this.mapVariant = mapVariant;
+        this.initialPlantsQuantity = initialPlantsQuantity;
+        this.consumedPlantEnergy = consumedPlantEnergy;
+        this.plantsGrowingADay = plantsGrowingADay;
+        this.foliageVariant = foliageVariant;
+        this.initialAnimalsNumber = initialAnimalsNumber;
+        this.initialEnergy = initialEnergy;
+        this.breedNeededEnergy = breedNeededEnergy;
+        this.breedLostEnergy = breedLostEnergy;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
+        this.mutationVariant = mutationVariant;
+        this.genotypeLength = genotypeLength;
+        this.behaviorVariant = behaviorVariant;
+    }
+
     public int getMapHeight() {
         return mapHeight;
     }
+
     public BehaviorVariant getBehaviorVariant() {
         return behaviorVariant;
     }
+
     public int getMapWidth() {
         return mapWidth;
     }
+
     public int getInitialEnergy() {
         return initialEnergy;
     }
@@ -82,29 +107,6 @@ public class Parameters {
 
     public int getGenotypeLength() {
         return genotypeLength;
-    }
-
-
-    public Parameters(int mapHeight, int mapWidth, MapVariant mapVariant, int initialPlantsQuantity,
-                      int consumedPlantEnergy, int plantsGrowingADay, FoliageVariant foliageVariant, int initialAnimalsNumber,
-                      int initialEnergy, int breedNeededEnergy, int breedLostEnergy, int minMutations,
-                      int maxMutations, MutationVariant mutationVariant, int genotypeLength, BehaviorVariant behaviorVariant) {
-        this.mapHeight = mapHeight;
-        this.mapWidth = mapWidth;
-        this.mapVariant = mapVariant;
-        this.initialPlantsQuantity = initialPlantsQuantity;
-        this.consumedPlantEnergy = consumedPlantEnergy;
-        this.plantsGrowingADay = plantsGrowingADay;
-        this.foliageVariant = foliageVariant;
-        this.initialAnimalsNumber = initialAnimalsNumber;
-        this.initialEnergy = initialEnergy;
-        this.breedNeededEnergy = breedNeededEnergy;
-        this.breedLostEnergy = breedLostEnergy;
-        this.minMutations = minMutations;
-        this.maxMutations = maxMutations;
-        this.mutationVariant = mutationVariant;
-        this.genotypeLength = genotypeLength;
-        this.behaviorVariant = behaviorVariant;
     }
 
 

@@ -16,20 +16,7 @@ public class Genotype {
         genotypeLength = genotype.length;
     }
 
-    public int getLength() {
-        return genotypeLength;
-    }
-
-    public int[] getRawGenotype() {
-        return genotype;
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(genotype);
-    }
-
-    public static Genotype cross(Animal animal1, Animal animal2, MutationVariant mutationVariant,int minMutations,int maxMutations) {
+    public static Genotype cross(Animal animal1, Animal animal2, MutationVariant mutationVariant, int minMutations, int maxMutations) {
         Animal animalStrong;
         Animal animalWeak;
         if (animal1.getEnergy() >= animal2.getEnergy()) {
@@ -63,17 +50,17 @@ public class Genotype {
             newGenotype[i] = genotypes[1][i];
             i++;
         }
-        return new Genotype(mutate(newGenotype, mutationVariant,minMutations,maxMutations));
+        return new Genotype(mutate(newGenotype, mutationVariant, minMutations, maxMutations));
     }
 
-    private static int[] mutate(int[] genotype, MutationVariant mutationVariant,int minMutations,int maxMutations) {
+    private static int[] mutate(int[] genotype, MutationVariant mutationVariant, int minMutations, int maxMutations) {
         return switch (mutationVariant) {
-            case FULLY_RANDOM -> mutateRandom(genotype,minMutations,maxMutations);
-            case SWAP -> mutateSwap(genotype,minMutations,maxMutations);
+            case FULLY_RANDOM -> mutateRandom(genotype, minMutations, maxMutations);
+            case SWAP -> mutateSwap(genotype, minMutations, maxMutations);
         };
     }
 
-    private static int[] mutateRandom(int[] genotype,int minMutations,int maxMutations) {
+    private static int[] mutateRandom(int[] genotype, int minMutations, int maxMutations) {
         Random random = new Random();
         int numberOfMutations = random.nextInt(minMutations, maxMutations + 1);
         ArrayList<Integer> list = new ArrayList<>();
@@ -86,7 +73,7 @@ public class Genotype {
         return genotype;
     }
 
-    private static int[] mutateSwap(int[] genotype,int minMutations,int maxMutations) {
+    private static int[] mutateSwap(int[] genotype, int minMutations, int maxMutations) {
         Random random = new Random();
         int numberOfMutations = random.nextInt(minMutations, maxMutations + 1);
         for (int i = 0; i < numberOfMutations; i++) swapRandomTwo(genotype);
@@ -110,5 +97,18 @@ public class Genotype {
             genotype[i] = random.nextInt(8);
         }
         return new Genotype(genotype);
+    }
+
+    public int getLength() {
+        return genotypeLength;
+    }
+
+    public int[] getRawGenotype() {
+        return genotype;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(genotype);
     }
 }

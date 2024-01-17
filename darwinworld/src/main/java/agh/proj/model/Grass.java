@@ -18,11 +18,11 @@ public class Grass implements WorldElement {
     public int getEnergy() {
         return energy;
     }
-    public String toString()
-    {
-        if(energy>0)
+
+    public String toString() {
+        if (energy > 0)
             return "*";
         else
-            return  "x";
+            return "x";
     }
 }

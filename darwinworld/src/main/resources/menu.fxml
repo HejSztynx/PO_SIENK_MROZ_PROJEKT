@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="700.0" minWidth="500.0"
+            fx:controller="agh.proj.gui.SimulationPresenter">
+
+
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+            <VBox alignment="CENTER">
+                <Label style="-fx-font-weight: bold; -fx-font-size: 20px">MAP CONFIGURATION</Label>
+                <HBox spacing="20" alignment="CENTER">
+                    <VBox spacing="10">
+                        <VBox>
+                            <Label>Map height</Label>
+                            <TextField fx:id = "mapHeight"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Map width</Label>
+                            <TextField fx:id = "mapWidth"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Map variant</Label>
+                            <TextField fx:id = "mapVariant" text = "LEAVE BLANK"/>
+                        </VBox>
+                    </VBox>
+                    <VBox spacing="10">
+                        <VBox>
+                            <Label>Initial number of grass</Label>
+                            <TextField fx:id = "grassNumber"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Grass energy</Label>
+                            <TextField fx:id = "grassEnergy"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Grass growing each day</Label>
+                            <TextField fx:id = "grassGrowth"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Grass variant</Label>
+                            <TextField fx:id = "grassVariant" text = "LEAVE BLANK"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="20" alignment="CENTER">
+                <Label style="-fx-font-weight: bold; -fx-font-size: 20px">ANIMAL CONFIGURATION</Label>
+                <HBox spacing="20" alignment="CENTER">
+                    <VBox spacing="10">
+                        <VBox>
+                            <Label>Initial number of animals</Label>
+                            <TextField fx:id = "animalNumber"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Initial energy of animals</Label>
+                            <TextField fx:id = "animalEnergy"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Energy needed for breeding</Label>
+                            <TextField fx:id = "breedEnergyNeeded"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Energy lost when breeding</Label>
+                            <TextField fx:id = "breedEnergyLost"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Behavior variant</Label>
+                            <TextField fx:id = "behaviorVariant" text = "LEAVE BLANK"/>
+                        </VBox>
+                    </VBox>
+                    <VBox spacing="10">
+                        <VBox>
+                            <Label>Minimum number of mutations</Label>
+                            <TextField fx:id = "minMutations"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Maximum number of mutations</Label>
+                            <TextField fx:id = "maxMutations"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Mutation variant</Label>
+                            <TextField fx:id = "mutationVariant" text = "LEAVE BLANK"/>
+                        </VBox>
+                        <VBox>
+                            <Label>Genome length</Label>
+                            <TextField fx:id = "genomeLength"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+            <VBox alignment = "CENTER" spacing = "10">
+                <Label/>
+                <Button onAction = "#onSimulationStartClicked">RUN</Button>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

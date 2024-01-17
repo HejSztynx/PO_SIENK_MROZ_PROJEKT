@@ -42,8 +42,9 @@ public enum MapDirection {
             case NORTH_WEST -> 7;
         };
     }
-    public String toString(){
-        return  switch (this){
+
+    public String toString() {
+        return switch (this) {
             case NORTH -> "⭡";
             case NORTH_EAST -> "⭧";
             case EAST -> "⭢";
