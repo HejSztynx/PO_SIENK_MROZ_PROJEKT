@@ -44,68 +44,63 @@ public class SimulationPresenter {
     @FXML
     private TextField genotypeLength;
 
-    private ArrayList<String> textFields= new ArrayList<>();
+    private ArrayList<String> values = new ArrayList<>();
 
     public void onSimulationStartClicked() {
-        textFields.clear();
-        textFields.addAll(List.of(mapHeight.getText(), mapWidth.getText(), initialPlantsQuantity.getText(), consumedPlantEnergy.getText(), plantsGrowingADay.getText(),
-                initialAnimalsNumber.getText(), initialEnergy.getText(), breedNeededEnergy.getText(), breedLostEnergy.getText(), minMutations.getText(), maxMutations.getText(), genotypeLength.getText()));
+        values.clear();
+        values.addAll(List.of(mapHeight.getText(), mapWidth.getText(), mapVariant.getValue(), initialPlantsQuantity.getText(),
+                consumedPlantEnergy.getText(), plantsGrowingADay.getText(),
+                foliageVariant.getValue(), initialAnimalsNumber.getText(), initialEnergy.getText(), breedNeededEnergy.getText(),
+                breedLostEnergy.getText(), minMutations.getText(), maxMutations.getText(),
+                mutationVariant.getValue(), genotypeLength.getText(), behaviorVariant.getValue()));
 
-        ArrayList<Integer> result = checkParameters(textFields);
-        if (!result.isEmpty()) {
-            Parameters parameters = new Parameters(result.get(0), result.get(1), VariantConverter.mapVariant(mapVariant.getValue()),
-                    result.get(2), result.get(3), result.get(4), VariantConverter.foliageVariant(foliageVariant.getValue()),
-                    result.get(5), result.get(6), result.get(7), result.get(8),
-                    result.get(9), result.get(10), VariantConverter.mutationVariant(mutationVariant.getValue()),
-                    result.get(11), VariantConverter.behaviorVariant(behaviorVariant.getValue()));
-//            Parameters parameters = new Parameters(result.get(0), result.get(1), MapVariant.GLOBE,
-//                    result.get(2), result.get(3), result.get(4), FoliageVariant.VERDANT_EQUATOR,
-//                    result.get(5), result.get(6), result.get(7), result.get(8),
-//                    result.get(9), result.get(10), MutationVariant.FULLY_RANDOM,
-//                    result.get(11), BehaviorVariant.FULL_PREDESTINATION);
+        Parameters parameters = checkParameters(values);
+        if (parameters != null) {
             Globe map = new Globe(parameters.getMapWidth(), parameters.getMapHeight(), parameters); // tu sie zmieni na WorldMap kiedys
             Simulation simulation = new Simulation(map);
             simulation.run();
         } else System.out.println("NIE GIT");
     }
 
-    private ArrayList<Integer> checkParameters(ArrayList<String> textFields) {
+    private Parameters checkParameters(ArrayList<String> values) {
         try {
-            int mapHeight = Integer.parseInt(textFields.get(0));
-            int mapWidth = Integer.parseInt(textFields.get(1));
-            int grassNumber = Integer.parseInt(textFields.get(2));
-            int grassEnergy = Integer.parseInt(textFields.get(3));
-            int grassGrowth = Integer.parseInt(textFields.get(4));
-            int animalNumber = Integer.parseInt(textFields.get(5));
-            int animalEnergy = Integer.parseInt(textFields.get(6));
-            int breedEnergyNeeded = Integer.parseInt(textFields.get(7));
-            int breedEnergyLost = Integer.parseInt(textFields.get(8));
-            int minMutations = Integer.parseInt(textFields.get(9));
-            int maxMutations = Integer.parseInt(textFields.get(10));
-            int genomeLength = Integer.parseInt(textFields.get(11));
+            int mapHeight = Integer.parseInt(values.get(0));
+            int mapWidth = Integer.parseInt(values.get(1));
+            int initialPlantsQuantity = Integer.parseInt(values.get(3));
+            int consumedPlantEnergy = Integer.parseInt(values.get(4));
+            int plantsGrowingADay = Integer.parseInt(values.get(5));
+            int initialAnimalsNumber = Integer.parseInt(values.get(7));
+            int initialEnergy = Integer.parseInt(values.get(8));
+            int breedNeededEnergy = Integer.parseInt(values.get(9));
+            int breedLostEnergy = Integer.parseInt(values.get(10));
+            int minMutations = Integer.parseInt(values.get(11));
+            int maxMutations = Integer.parseInt(values.get(12));
+            int genotypeLength = Integer.parseInt(values.get(14));
 
             if ((mapHeight >= 2) &&
                     (mapWidth >= 2) &&
-                    (grassNumber >= 0) &&
-                    (grassEnergy >= 0) &&
-                    (grassGrowth >= 0) &&
-                    (animalNumber >= 1) &&
-                    (animalEnergy >= 1) &&
-                    (breedEnergyNeeded >= 1) &&
-                    (breedEnergyLost >= 0) &&
+                    (initialPlantsQuantity >= 0) &&
+                    (consumedPlantEnergy >= 0) &&
+                    (plantsGrowingADay >= 0) &&
+                    (initialAnimalsNumber >= 1) &&
+                    (initialEnergy >= 1) &&
+                    (breedNeededEnergy >= 1) &&
+                    (breedLostEnergy >= 0) &&
                     (minMutations >= 0) &&
                     (maxMutations >= 0 && maxMutations >= minMutations) &&
-                    (genomeLength >= 1)
+                    (genotypeLength >= 1)
             ) {
-                return new ArrayList<>(List.of(mapHeight, mapWidth, grassNumber,
-                        grassEnergy, grassGrowth, animalNumber, animalEnergy, breedEnergyNeeded, breedEnergyLost,
-                        minMutations, maxMutations, genomeLength));
+                return new Parameters(mapHeight, mapWidth, VariantConverter.mapVariant(mapVariant.getValue()), initialPlantsQuantity,
+                        consumedPlantEnergy, plantsGrowingADay, VariantConverter.foliageVariant(foliageVariant.getValue()), initialAnimalsNumber,
+                        initialEnergy, breedNeededEnergy, breedLostEnergy, minMutations, maxMutations,
+                        VariantConverter.mutationVariant(mutationVariant.getValue()), genotypeLength,
+                        VariantConverter.behaviorVariant(behaviorVariant.getValue()));
             } else {
-                return new ArrayList<Integer>();
+                return null;
             }
 
         } catch (NumberFormatException e) {
-            return new ArrayList<Integer>();
+            return null;
         }
     }
 }
