@@ -142,7 +142,11 @@
             </VBox>
             <VBox alignment = "CENTER" spacing = "10">
                 <Label/>
-                <Button onAction = "#onSimulationStartClicked">RUN</Button>
+                <VBox spacing = "10" alignment = "CENTER">
+                    <Button onAction = "#onSavePresetsClicked">SAVE PRESET</Button>
+                    <Button onAction = "#onSimulationStartClicked">RUN</Button>
+                </VBox>
+
             </VBox>
         </VBox>
     </center>

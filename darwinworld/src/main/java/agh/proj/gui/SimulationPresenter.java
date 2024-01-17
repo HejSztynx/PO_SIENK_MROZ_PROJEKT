@@ -2,6 +2,7 @@ package agh.proj.gui;
 
 import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
+import agh.proj.model.util.CSVParameterSaver;
 import agh.proj.simulation.Simulation;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -44,15 +45,19 @@ public class SimulationPresenter {
     @FXML
     private TextField genotypeLength;
 
-    private ArrayList<String> values = new ArrayList<>();
+    private final ArrayList<String> values = new ArrayList<>();
 
-    public void onSimulationStartClicked() {
+    private void initializeValues() {
         values.clear();
         values.addAll(List.of(mapHeight.getText(), mapWidth.getText(), mapVariant.getValue(), initialPlantsQuantity.getText(),
                 consumedPlantEnergy.getText(), plantsGrowingADay.getText(),
                 foliageVariant.getValue(), initialAnimalsNumber.getText(), initialEnergy.getText(), breedNeededEnergy.getText(),
                 breedLostEnergy.getText(), minMutations.getText(), maxMutations.getText(),
                 mutationVariant.getValue(), genotypeLength.getText(), behaviorVariant.getValue()));
+    }
+
+    public void onSimulationStartClicked() {
+        initializeValues();
 
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
@@ -60,6 +65,16 @@ public class SimulationPresenter {
             Simulation simulation = new Simulation(map);
             simulation.run();
         } else System.out.println("NIE GIT");
+    }
+
+    public void onSavePresetsClicked() {
+        initializeValues();
+        Parameters parameters = checkParameters(values);
+        if (parameters != null) {
+            CSVParameterSaver saver = new CSVParameterSaver();
+            saver.save(values);
+        } else System.out.println("NIE GIT");
+
     }
 
     private Parameters checkParameters(ArrayList<String> values) {
