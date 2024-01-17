@@ -7,6 +7,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="700.0" minWidth="500.0"
@@ -29,7 +32,16 @@
                         </VBox>
                         <VBox>
                             <Label>Map variant</Label>
-                            <TextField fx:id = "mapVariant" text = "LEAVE BLANK"/>
+                            <ComboBox fx:id="mapVariant">
+                                <items>
+                                    <FXCollections fx:factory = "observableArrayList">
+                                        <String fx:value = "Globe"/>
+                                    </FXCollections>
+                                </items>
+                                <value>
+                                    <String fx:value = "Globe"/>
+                                </value>
+                            </ComboBox>
                         </VBox>
                     </VBox>
                     <VBox spacing="10">
@@ -46,8 +58,19 @@
                             <TextField fx:id = "grassGrowth"/>
                         </VBox>
                         <VBox>
-                            <Label>Grass variant</Label>
-                            <TextField fx:id = "grassVariant" text = "LEAVE BLANK"/>
+                            <Label>Foliage variant</Label>
+                            <ComboBox fx:id="foliageVariant">
+                                <items>
+                                    <FXCollections fx:factory = "observableArrayList">
+                                        <String fx:value = "Verdant Equator"/>
+                                        <String fx:value = "Poisonous Plants"/>
+                                    </FXCollections>
+                                </items>
+                                <value>
+                                    <String fx:value = "Verdant Equator"/>
+                                </value>
+                            </ComboBox>
+
                         </VBox>
                     </VBox>
                 </HBox>
@@ -75,7 +98,16 @@
                         </VBox>
                         <VBox>
                             <Label>Behavior variant</Label>
-                            <TextField fx:id = "behaviorVariant" text = "LEAVE BLANK"/>
+                            <ComboBox fx:id="behaviorVariant">
+                                <items>
+                                    <FXCollections fx:factory = "observableArrayList">
+                                        <String fx:value = "Full Predestination"/>
+                                    </FXCollections>
+                                </items>
+                                <value>
+                                    <String fx:value = "Full Predestination"/>
+                                </value>
+                            </ComboBox>
                         </VBox>
                     </VBox>
                     <VBox spacing="10">
@@ -89,7 +121,17 @@
                         </VBox>
                         <VBox>
                             <Label>Mutation variant</Label>
-                            <TextField fx:id = "mutationVariant" text = "LEAVE BLANK"/>
+                            <ComboBox fx:id="mutationVariant">
+                                <items>
+                                    <FXCollections fx:factory = "observableArrayList">
+                                        <String fx:value = "Fully Random"/>
+                                        <String fx:value = "Swap"/>
+                                    </FXCollections>
+                                </items>
+                                <value>
+                                    <String fx:value = "Fully Random"/>
+                                </value>
+                            </ComboBox>
                         </VBox>
                         <VBox>
                             <Label>Genome length</Label>

@@ -2,13 +2,13 @@ package agh.proj.gui;
 
 import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
-import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.variants.BehaviorVariant;
 import agh.proj.model.variants.FoliageVariant;
 import agh.proj.model.variants.MapVariant;
 import agh.proj.model.variants.MutationVariant;
 import agh.proj.simulation.Simulation;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class SimulationPresenter {
     @FXML
     private TextField mapWidth;
     @FXML
-    private TextField mapVariant;
+    private ComboBox<String> mapVariant;
     @FXML
     private TextField grassNumber;
     @FXML
@@ -28,7 +28,7 @@ public class SimulationPresenter {
     @FXML
     private TextField grassGrowth;
     @FXML
-    private TextField grassVariant;
+    private ComboBox<String> foliageVariant;
     @FXML
     private TextField animalNumber;
     @FXML
@@ -38,31 +38,36 @@ public class SimulationPresenter {
     @FXML
     private TextField breedEnergyLost;
     @FXML
-    private TextField behaviorVariant;
+    private ComboBox<String> behaviorVariant;
     @FXML
     private TextField minMutations;
     @FXML
     private TextField maxMutations;
     @FXML
-    private TextField mutationVariant;
+    private ComboBox<String> mutationVariant;
     @FXML
     private TextField genomeLength;
 
     private ArrayList<String> textFields= new ArrayList<>();
 
     public void onSimulationStartClicked() {
-        System.out.println(mapHeight.getText());
         textFields.clear();
         textFields.addAll(List.of(mapHeight.getText(), mapWidth.getText(), grassNumber.getText(), grassEnergy.getText(), grassGrowth.getText(),
                 animalNumber.getText(), animalEnergy.getText(), breedEnergyNeeded.getText(), breedEnergyLost.getText(), minMutations.getText(), maxMutations.getText(), genomeLength.getText()));
 
         ArrayList<Integer> result = checkParameters(textFields);
         if (!result.isEmpty()) {
-            Parameters parameters = new Parameters(result.get(0), result.get(1), MapVariant.GLOBE,
-                    result.get(2), result.get(3), result.get(4), FoliageVariant.VERDANT_EQUATOR,
+            Parameters parameters = new Parameters(result.get(0), result.get(1), VariantConverter.mapVariant(mapVariant.getValue()),
+                    result.get(2), result.get(3), result.get(4), VariantConverter.foliageVariant(foliageVariant.getValue()),
                     result.get(5), result.get(6), result.get(7), result.get(8),
-                    result.get(9), result.get(10), MutationVariant.SWAP, result.get(11), BehaviorVariant.FULL_PREDESTINATION); // tu sie zmieni na WorldMap kiedys
-            Globe map = new Globe(parameters.getMapWidth(), parameters.getMapHeight(), parameters);
+                    result.get(9), result.get(10), VariantConverter.mutationVariant(mutationVariant.getValue()),
+                    result.get(11), VariantConverter.behaviorVariant(behaviorVariant.getValue()));
+//            Parameters parameters = new Parameters(result.get(0), result.get(1), MapVariant.GLOBE,
+//                    result.get(2), result.get(3), result.get(4), FoliageVariant.VERDANT_EQUATOR,
+//                    result.get(5), result.get(6), result.get(7), result.get(8),
+//                    result.get(9), result.get(10), MutationVariant.FULLY_RANDOM,
+//                    result.get(11), BehaviorVariant.FULL_PREDESTINATION);
+            Globe map = new Globe(parameters.getMapWidth(), parameters.getMapHeight(), parameters); // tu sie zmieni na WorldMap kiedys
             Simulation simulation = new Simulation(map);
             simulation.run();
         } else System.out.println("NIE GIT");

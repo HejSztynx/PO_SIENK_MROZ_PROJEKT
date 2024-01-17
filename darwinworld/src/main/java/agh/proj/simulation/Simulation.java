@@ -14,6 +14,7 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
+        System.out.println(mapVisualizer.draw());
         while (worldMap.allDead() != 0) {
             worldMap.dayCleaner();
             worldMap.dayMovesAnimal();
