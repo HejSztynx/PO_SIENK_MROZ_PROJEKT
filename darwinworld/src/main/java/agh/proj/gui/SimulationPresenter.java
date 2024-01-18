@@ -65,12 +65,7 @@ public class SimulationPresenter {
     public void initialize() {
         initializeCSVDirectory();
 
-        CSVReader csvReader = new CSVReader();
-        ArrayList<String> presetNames = new ArrayList<>();
-        presetNames.add("Custom");
-        presetNames.addAll(csvReader.readFirstColumn(presetsFileLocation));
-        presets.setItems(FXCollections.observableArrayList(presetNames));
-        presets.setValue("Custom");
+        initializePresets();
 
         presets.setOnAction(event -> {
             String chosenPreset = presets.getValue();
@@ -78,10 +73,19 @@ public class SimulationPresenter {
                 clearMenu();
                 return;
             }
-            int presetNumber = Integer.parseInt(chosenPreset.substring(chosenPreset.length() - 1));
-            ArrayList<String> presetParameters = csvReader.readLineData(presetNumber, presetsFileLocation);
+            CSVReader csvReader = new CSVReader();
+            ArrayList<String> presetParameters = csvReader.readLineData(presetsFileLocation, chosenPreset);
             fillMenu(presetParameters);
         });
+    }
+
+    private void initializePresets() {
+        CSVReader csvReader = new CSVReader();
+        ArrayList<String> presetNames = new ArrayList<>();
+        presetNames.add("Custom");
+        presetNames.addAll(csvReader.readFirstColumn(presetsFileLocation));
+        presets.setItems(FXCollections.observableArrayList(presetNames));
+        presets.setValue("Custom");
     }
 
     private void initializeCSVDirectory() {
@@ -175,7 +179,6 @@ public class SimulationPresenter {
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
             CSVParameterSaver saver = new CSVParameterSaver();
-            System.out.println(values);
             saver.save(values, presetsFileLocation);
         } else System.out.println("NIE GIT");
 
@@ -185,7 +188,8 @@ public class SimulationPresenter {
         String toDelete = presets.getValue();
         if (toDelete.equals("Custom")) return;
         CSVParameterSaver csvParameterSaver = new CSVParameterSaver();
-//        csvParameterSaver.delete(presetsFileLocation, toDelete); nie dziala
+        csvParameterSaver.delete(presetsFileLocation, toDelete);
+        initializePresets();
     }
 
     private Parameters checkParameters(ArrayList<String> values) {

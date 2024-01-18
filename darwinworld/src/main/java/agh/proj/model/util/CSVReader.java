@@ -3,8 +3,6 @@ package agh.proj.model.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class CSVReader {
@@ -17,7 +15,8 @@ public class CSVReader {
             while ((line = reader.readLine()) != null) {
                 String[] columns = line.split(",");
                 if (columns.length > 0) {
-                    firstColumnValues.add(columns[0]);
+                    if (!columns[0].isEmpty())
+                        firstColumnValues.add(columns[0]);
                 }
             }
         } catch (IOException e) {
@@ -27,8 +26,9 @@ public class CSVReader {
         return firstColumnValues;
     }
 
-    public ArrayList<String> readLineData(int n, String url) {
+    public ArrayList<String> readLineData(String url, String preset) {
         ArrayList<String> values = new ArrayList<>();
+        int n = findLineIndex(url, preset);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(url))) {
             String line;
@@ -44,5 +44,22 @@ public class CSVReader {
             e.printStackTrace();
         }
         return values;
+    }
+
+    private int findLineIndex(String url, String preset) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(url))) {
+            int lineNumber = 0;
+            String line;
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+                String[] columns = line.split(",");
+                if (columns[0].equals(preset)) return lineNumber;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

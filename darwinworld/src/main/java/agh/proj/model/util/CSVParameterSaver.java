@@ -35,7 +35,6 @@ public class CSVParameterSaver {
         Path path = Paths.get(url);
         try {
             lines = Files.readAllLines(path);
-            System.out.println(lines);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -48,86 +47,30 @@ public class CSVParameterSaver {
             }
         }
 
-        String a = newLines.get(newLines.size() - 1).replaceAll("([\\n\\r]+\\s*)*$", "");
-        newLines.remove(newLines.size() - 1);
-        newLines.add(a);
-//        int lastIndex = newLines.size() - 1;
-
-        // Usuń puste linie z końca listy
-//        while (lastIndex >= 0 && newLines.get(lastIndex).trim().isEmpty()) {
-//            newLines.remove(lastIndex);
-//            lastIndex--;
-//        }
-//
         try {
             Files.write(path, newLines, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        try (RandomAccessFile file = new RandomAccessFile(url, "rw")) {
-//            long length = file.length();
-//
-//            if (length == 0) {
-//                // Plik jest pusty, nie ma linii do usunięcia
-//                return;
-//            }
-//
-//            // Znajdź pozycję ostatniej nowej linii
-//            long position = length - 1;
-//            while (position > 0 && file.readByte() != '\n') {
-//                position--;
-//                file.seek(position);
-//            }
-//
-//            // Ustaw pozycję na koniec pliku
-//            file.setLength(position);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private int nextPresentNumber(String url) {
         try (BufferedReader reader = new BufferedReader(new FileReader(url))) {
-            String line1;
-            String line2;
-            line1 = reader.readLine();
-            while ((line2 = reader.readLine()) != null) {
-                line1 = line2;
+            String line;
+            reader.readLine();
+            String res = "0";
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split(",");
+                String lastPreset = columns[0];
+                if (lastPreset.isEmpty()) continue;
+                res = lastPreset.split(" ")[1];
             }
-            String[] columns = line1.split(",");
-            String lastPreset = columns[0];
-            if (lastPreset.equals("preset")) return 1;
-            lastPreset = lastPreset.split(" ")[1];
-            return Integer.parseInt(lastPreset) + 1;
+
+            return Integer.parseInt(res) + 1;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return 0;
-    }
-
-    private boolean isLastLineEmpty(String url) {
-        try {
-            Path path = Path.of(url);
-
-            // Odczytaj wszystkie linie z pliku
-            String content = Files.readString(path, StandardCharsets.UTF_8);
-
-            // Podziel treść pliku na linie
-            String[] lines = content.split("\\r?\\n");
-
-            // Sprawdź, czy ostatnia linia jest pusta
-            if (lines.length > 0) {
-                String lastLine = lines[lines.length - 1];
-                return true;
-            }
-
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 }
