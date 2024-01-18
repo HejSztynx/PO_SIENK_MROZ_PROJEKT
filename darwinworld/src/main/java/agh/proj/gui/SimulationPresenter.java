@@ -69,6 +69,7 @@ public class SimulationPresenter {
 
         presets.setOnAction(event -> {
             String chosenPreset = presets.getValue();
+            if (chosenPreset == null) return;
             if (chosenPreset.equals("Custom")) {
                 clearMenu();
                 return;
@@ -80,12 +81,17 @@ public class SimulationPresenter {
     }
 
     private void initializePresets() {
+        updatePresets();
+        presets.setValue("Custom");
+    }
+
+    private void updatePresets() {
         CSVReader csvReader = new CSVReader();
         ArrayList<String> presetNames = new ArrayList<>();
         presetNames.add("Custom");
         presetNames.addAll(csvReader.readFirstColumn(presetsFileLocation));
+
         presets.setItems(FXCollections.observableArrayList(presetNames));
-        presets.setValue("Custom");
     }
 
     private void initializeCSVDirectory() {
@@ -180,6 +186,7 @@ public class SimulationPresenter {
         if (parameters != null) {
             CSVParameterSaver saver = new CSVParameterSaver();
             saver.save(values, presetsFileLocation);
+            updatePresets();
         } else System.out.println("NIE GIT");
 
     }
