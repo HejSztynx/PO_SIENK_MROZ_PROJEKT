@@ -1,7 +1,6 @@
 package agh.proj.model;
 
 import agh.proj.model.interfaces.BoundsValidator;
-import agh.proj.model.interfaces.MapChangeListener;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
@@ -67,6 +66,8 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int avgEnergy() {
+        if(allDead()==0)
+            return 0;
         int n = 0;
         int wyn = 0;
         for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
@@ -81,7 +82,12 @@ public class Globe implements WorldMap, BoundsValidator {
         return wyn / n;
     }
 
+    public int getDay(){
+        return day;
+    }
     public int avgChildren() {
+        if(allDead()==0)
+            return 0;
         int n = 0;
         int wyn = 0;
         for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
@@ -91,7 +97,6 @@ public class Globe implements WorldMap, BoundsValidator {
                 n++;
                 wyn += values.get(i).getChildrenNo();
             }
-
         }
         return wyn / n;
     }
@@ -115,14 +120,16 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int numberOfEmptySpaces() {
-        int wyn = 0;
-        for (int i = 0; i < upperRight.getY() + 1; i++) {
-            for (int j = 0; j < upperRight.getX() + 1; j++) {
-                if (isOccupied(new Vector2d(j, i)))
-                    wyn++;
-            }
-        }
-        return wyn;
+
+        return ((upperRight.getX()+1) * (upperRight.getY()+1) - grasses.size());
+//        int wyn = 0;
+//        for (int i = 0; i < upperRight.getY() + 1; i++) {
+//            for (int j = 0; j < upperRight.getX() + 1; j++) {
+//                if (isOccupied(new Vector2d(j, i))==false)
+//                    wyn++;
+//            }
+//        }
+//        return wyn;
     }
 
     private void generateJungle() {
@@ -166,12 +173,15 @@ public class Globe implements WorldMap, BoundsValidator {
                 else
                     grass = generator.generateGrass(biomes.get("Jungle").boundsValidator(position), 0, parameters.getConsumedPlantEnergy(), position);
                 if (grass.getEnergy() != 0) {
-                    grasses.putIfAbsent(position, grass);
-                    grassCount++;
+                    if(grasses.get(position)==null)
+                    {
+                        grasses.put(position,grass);
+                        grassCount++;
+                    }
                 }
-                if (upperRight.getX() * upperRight.getY() - grasses.size() < grassCount || grassCount > parameters.getPlantsGrowingADay())
+                if (numberOfEmptySpaces() <=0 || grassCount >= parameters.getPlantsGrowingADay())
                     return;
-                else if (i == upperRight.getY()) {
+                else if (i == upperRight.getY() && j == upperRight.getX()) {
                     i = 0;
                 }
             }
@@ -186,7 +196,9 @@ public class Globe implements WorldMap, BoundsValidator {
             records.add(animal);
             descendantTree.add(new ArrayList<>());
             animals.get(position).add(animal);
-            //mostPopular.put(animal.getGenotype(),mostPopular.get(animal.getGenotype())+1);
+            if(mostPopular.get(animal.getGenotype())==null)
+                mostPopular.put(animal.getGenotype(),0);
+            mostPopular.put(animal.getGenotype(),mostPopular.get(animal.getGenotype())+1);
         }
     }
 
@@ -248,9 +260,11 @@ public class Globe implements WorldMap, BoundsValidator {
                     records.add(newAnimal);
                     place(newAnimal, newAnimal.getPosition());
                     descendantTree.get(animal1.getHisNumber()).add(animalCount - 1);
-                    descendantTree.get(animal2.getHisNumber()).add(animalCount - 1);
+            git         descendantTree.get(animal2.getHisNumber()).add(animalCount - 1);
                     descendantTree.add(new ArrayList<>());
-                    // mostPopular.put(newAnimal.getGenotype(),mostPopular.get(newAnimal.getGenotype())+1);
+                    if(mostPopular.get(newAnimal.getGenotype())==null)
+                        mostPopular.put(newAnimal.getGenotype(),0);
+                    mostPopular.put(newAnimal.getGenotype(),mostPopular.get(newAnimal.getGenotype())+1);
                     //System.out.println(values+"->"+key);
                 }
             }
