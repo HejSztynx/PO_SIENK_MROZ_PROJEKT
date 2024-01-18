@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationPresenter {
-    private static String FIRST_CSV_LINE = "preset,mapHeight,mapWidth,mapVariant,initialPlantsQuantity," +
+    private static final String FIRST_CSV_LINE = "preset,mapHeight,mapWidth,mapVariant,initialPlantsQuantity," +
             "consumedPlantEnergy,plantsGrowingADay,foliageVariant,initialAnimalsNumber,initialEnergy," +
             "breedNeededEnergy,breedLostEnergy,minMutations,maxMutations,mutationVariant,genotypeLength,behaviorVariant";
     private final String projectDirectory = System.getProperty("user.dir");
@@ -71,6 +71,17 @@ public class SimulationPresenter {
         presetNames.addAll(csvReader.readFirstColumn(presetsFileLocation));
         presets.setItems(FXCollections.observableArrayList(presetNames));
         presets.setValue("Custom");
+
+        presets.setOnAction(event -> {
+            String chosenPreset = presets.getValue();
+            if (chosenPreset.equals("Custom")) {
+                clearMenu();
+                return;
+            }
+            int presetNumber = Integer.parseInt(chosenPreset.substring(chosenPreset.length() - 1));
+            ArrayList<String> presetParameters = csvReader.readLineData(presetNumber, presetsFileLocation);
+            fillMenu(presetParameters);
+        });
     }
 
     private void initializeCSVDirectory() {
@@ -95,15 +106,51 @@ public class SimulationPresenter {
 
     private void initializeCSVFile(String url) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(url))) {
-//            writer.newLine();
             writer.write(FIRST_CSV_LINE);
-//                System.out.println("ZAPISALEM");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void initializeValues() {
+    private void fillMenu(ArrayList<String> values) {
+        mapHeight.setText(values.get(0));
+        mapWidth.setText(values.get(1));
+        mapVariant.setValue(values.get(2));
+        initialPlantsQuantity.setText(values.get(3));
+        consumedPlantEnergy.setText(values.get(4));
+        plantsGrowingADay.setText(values.get(5));
+        foliageVariant.setValue(values.get(6));
+        initialAnimalsNumber.setText(values.get(7));
+        initialEnergy.setText(values.get(8));
+        breedNeededEnergy.setText(values.get(9));
+        breedLostEnergy.setText(values.get(10));
+        minMutations.setText(values.get(11));
+        maxMutations.setText(values.get(12));
+        mutationVariant.setValue(values.get(13));
+        genotypeLength.setText(values.get(14));
+        behaviorVariant.setValue(values.get(15));
+    }
+
+    private void clearMenu() {
+        mapHeight.setText("");
+        mapWidth.setText("");
+        mapVariant.setValue("Globe");
+        initialPlantsQuantity.setText("");
+        consumedPlantEnergy.setText("");
+        plantsGrowingADay.setText("");
+        foliageVariant.setValue("Verdant Equator");
+        initialAnimalsNumber.setText("");
+        initialEnergy.setText("");
+        breedNeededEnergy.setText("");
+        breedLostEnergy.setText("");
+        minMutations.setText("");
+        maxMutations.setText("");
+        mutationVariant.setValue("Fully Random");
+        genotypeLength.setText("");
+        behaviorVariant.setValue("Full Predestination");
+    }
+
+    private void downloadValues() {
         values.clear();
         values.addAll(List.of(mapHeight.getText(), mapWidth.getText(), mapVariant.getValue(), initialPlantsQuantity.getText(),
                 consumedPlantEnergy.getText(), plantsGrowingADay.getText(),
@@ -113,7 +160,7 @@ public class SimulationPresenter {
     }
 
     public void onSimulationStartClicked() {
-        initializeValues();
+        downloadValues();
 
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
@@ -124,13 +171,21 @@ public class SimulationPresenter {
     }
 
     public void onSavePresetsClicked() {
-        initializeValues();
+        downloadValues();
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
             CSVParameterSaver saver = new CSVParameterSaver();
+            System.out.println(values);
             saver.save(values, presetsFileLocation);
         } else System.out.println("NIE GIT");
 
+    }
+
+    public void onDeletePresetsClicked() {
+        String toDelete = presets.getValue();
+        if (toDelete.equals("Custom")) return;
+        CSVParameterSaver csvParameterSaver = new CSVParameterSaver();
+//        csvParameterSaver.delete(presetsFileLocation, toDelete); nie dziala
     }
 
     private Parameters checkParameters(ArrayList<String> values) {

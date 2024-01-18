@@ -156,7 +156,10 @@
             <VBox alignment="CENTER" spacing="10">
                 <Label/>
                 <VBox spacing="10" alignment="CENTER">
-                    <Button onAction="#onSavePresetsClicked">SAVE PRESET</Button>
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button onAction="#onSavePresetsClicked">SAVE PRESET</Button>
+                        <Button onAction="#onDeletePresetsClicked">DELETE PRESET</Button>
+                    </HBox>
                     <Button onAction="#onSimulationStartClicked">RUN</Button>
                 </VBox>
 
