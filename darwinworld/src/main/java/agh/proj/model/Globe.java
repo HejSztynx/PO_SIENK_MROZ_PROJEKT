@@ -1,6 +1,7 @@
 package agh.proj.model;
 
 import agh.proj.model.interfaces.BoundsValidator;
+import agh.proj.model.interfaces.MapChangeListener;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
