@@ -31,24 +31,19 @@ public class Simulation implements Runnable {
                 throw new RuntimeException(e);
             }
             worldMap.dayCleaner();
-            // System.out.println(worldMap.allDead() + ":DeadAnimals");
+            System.out.println(worldMap.allDead() + ":DeadAnimals");
             worldMap.dayMovesAnimal();
             worldMap.dayEating();
-            //System.out.println(worldMap.avgEnergy() + ":Avg Energy");
+            System.out.println(worldMap.avgEnergy() + ":Avg Energy");
             worldMap.dayBreading();
-            //System.out.println(worldMap.avgChildren() + ":Avg Children");
+            System.out.println(worldMap.avgChildren() + ":Avg Children");
             worldMap.dayGrassGenerator();
-            //System.out.println(worldMap.numberOfEmptySpaces() + ":EmptySpaces");
+            System.out.println(worldMap.numberOfEmptySpaces() + ":EmptySpaces");
             worldMap.addDay();
-            //System.out.println(worldMap.getDay() + ":Day");
-            //System.out.println(worldMap.mostPopularGenom() + ":Genom");
+            System.out.println(worldMap.getDay() + ":Day");
+            System.out.println(worldMap.mostPopularGenom() + ":Genom");
             System.out.println(mapVisualizer.draw());
             callSubscribers();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-
-            }
         }
         System.out.println("Sim End");
     }
