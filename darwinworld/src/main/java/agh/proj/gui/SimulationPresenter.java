@@ -24,6 +24,8 @@ public class SimulationPresenter {
     private final String projectDirectory = System.getProperty("user.dir");
     private final String presetsFileLocation = projectDirectory + "/presets/presets.csv";
 
+    private SimulationApp mainApp;
+
     @FXML
     private TextField mapHeight;
     @FXML
@@ -61,6 +63,10 @@ public class SimulationPresenter {
     private ComboBox<String> presets;
 
     private final ArrayList<String> values = new ArrayList<>();
+
+    public void setMainApp(SimulationApp app) {
+        mainApp = app;
+    }
 
     public void initialize() {
         initializeCSVDirectory();
@@ -174,9 +180,7 @@ public class SimulationPresenter {
 
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
-            Globe map = new Globe(parameters.getMapWidth(), parameters.getMapHeight(), parameters); // tu sie zmieni na WorldMap kiedys
-            Simulation simulation = new Simulation(map);
-            simulation.run();
+            mainApp.openSecondView(parameters);
         } else System.out.println("NIE GIT");
     }
 

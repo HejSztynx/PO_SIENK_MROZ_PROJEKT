@@ -164,8 +164,8 @@ public class Globe implements WorldMap, BoundsValidator {
     public void dayGrassGenerator() {
         GrassGenerator generator = new GrassGenerator();
         int grassCount = 0;
-        for (int i = 0; i < upperRight.getY() + 1; i++) {
-            for (int j = 0; j < upperRight.getX() + 1; j++) {
+        for (int i = 0; i < upperRight.getY()+1; i++) {
+            for (int j = 0; j < upperRight.getX()+1; j++) {
                 Vector2d position = new Vector2d(j, i);
                 Grass grass = null;
                 if (parameters.getMapVariant() == MapVariant.SWAMP)
@@ -176,14 +176,19 @@ public class Globe implements WorldMap, BoundsValidator {
                     if(grasses.get(position)==null)
                     {
                         grasses.put(position,grass);
-                        grassCount++;
+                        grassCount+=1;
                     }
                 }
                 if (numberOfEmptySpaces() <=0 || grassCount >= parameters.getPlantsGrowingADay())
+                {
+
                     return;
-                else if (i == upperRight.getY() && j == upperRight.getX()) {
-                    i = 0;
                 }
+                else if (i >= upperRight.getY() && j >= upperRight.getX()) {
+                    i = 0;
+                    System.out.println(grassCount+"/"+parameters.getPlantsGrowingADay()+":"+numberOfEmptySpaces());
+                }
+
             }
         }
     }
