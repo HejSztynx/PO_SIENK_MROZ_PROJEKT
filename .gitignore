@@ -11,6 +11,7 @@ darwinworld/gradle
 darwinworld/gradlew
 darwinworld/gradlew.bat
 darwinworld/presets/
+presets
 
 # User-specific stuff
 .idea/**/workspace.xml
