@@ -4,6 +4,7 @@ import agh.proj.model.interfaces.BoundsValidator;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
+import agh.proj.model.variants.FoliageVariant;
 import agh.proj.model.variants.MapVariant;
 
 import java.util.*;
@@ -28,7 +29,7 @@ public class Globe implements WorldMap, BoundsValidator {
         upperRight = new Vector2d(width, height);
         this.parameters = parameters;
         generateJungle();
-        if (parameters.getMapVariant() == MapVariant.SWAMP)
+        if (parameters.getFoliageVariant() == FoliageVariant.POISONOUS_PLANTS)
             generateSwamp();
         initialGrassGenerator();
         initialAnimalMap();
@@ -147,6 +148,22 @@ public class Globe implements WorldMap, BoundsValidator {
         int swampWidth = (int) (upperRight.getX() / sqrt(5));
         Biome jungle = new Biome(new Vector2d(startWidth, startHeight), new Vector2d(startWidth + swampWidth, startHeight + swampHeight));
         biomes.put("Swamp", jungle);
+    }
+
+    public String biomeColor(int x, int y) {
+        String color;
+        Vector2d position = new Vector2d(x, y);
+        if (biomes.containsKey("Jungle") && biomes.get("Jungle").boundsValidator(position)) {
+            color = "lightgreen";
+            if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
+                color = "lightblue";
+            }
+        }
+        else if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
+            color = "lightpurple";
+        }
+        else color = "lightyellow";
+        return color;
     }
 
     private void initialGrassGenerator() {
