@@ -11,11 +11,10 @@ import agh.proj.simulation.SimulationEngine;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -27,6 +26,9 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
     private int cellDim = 80;
+    @FXML
+    private Button pauseResumeButton;
+    private SimulationEngine se = null;
 
     public void initialize() {
         if (parameters == null) {
@@ -41,7 +43,7 @@ public class SimulationRunner implements MapChangeListener {
         worldMap = map;
         Simulation simulation = new Simulation(map);
         simulation.register(this);
-        SimulationEngine se = new SimulationEngine(new ArrayList<>(List.of(simulation)));
+        se = new SimulationEngine(new ArrayList<>(List.of(simulation)));
         try {
             se.runAsyncInThreadPool();
         } catch (InterruptedException e) {
@@ -54,6 +56,17 @@ public class SimulationRunner implements MapChangeListener {
         initialize();
     }
 
+    synchronized public void simulationPauseResumeClicked() {
+        String value = pauseResumeButton.getText();
+        if (value.equals("PAUSE")) {
+            se.pauseResumeThreads(true);
+            pauseResumeButton.setText("RESUME");
+        }
+        else if (value.equals("RESUME")) {
+            se.pauseResumeThreads(false);
+            pauseResumeButton.setText("STOP");
+        }
+    }
     @Override
     public void mapChanged() {
         Platform.runLater(this::drawMap);

@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
 
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             minHeight="700.0" minWidth="500.0"
@@ -14,6 +15,7 @@
         <VBox spacing="20" alignment="CENTER">
             <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
             <GridPane fx:id = "mapGrid" gridLinesVisible="true" alignment="CENTER"/>
+            <Button fx:id="pauseResumeButton" onAction="#simulationPauseResumeClicked" text="PAUSE"/>
         </VBox>
     </center>
 
