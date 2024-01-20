@@ -38,7 +38,7 @@ public class Simulation implements Runnable {
 
             while (pause) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

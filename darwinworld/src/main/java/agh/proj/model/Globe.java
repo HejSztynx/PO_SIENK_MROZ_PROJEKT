@@ -5,7 +5,6 @@ import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
 import agh.proj.model.variants.FoliageVariant;
-import agh.proj.model.variants.MapVariant;
 
 import java.util.*;
 
@@ -13,12 +12,11 @@ import static java.lang.Math.sqrt;
 
 public class Globe implements WorldMap, BoundsValidator {
     private static int animalCount = 0;
-    private final Vector2d lowerLeft = new Vector2d(0, 0);
     private final Vector2d upperRight;
-    private final List<Animal> records = new ArrayList<>();
-    private final List<Animal> deadAnimals = new ArrayList<>();
+    private static int numberOfAllAnimals=0;
+    private static int deadAnimals = 0;
+    private static int sumOfAge=0;
     private final Map<String, Biome> biomes = new HashMap<>();
-    private final List<List<Integer>> descendantTree = new ArrayList<>();
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final Parameters parameters;
     private int day = 0;
@@ -52,7 +50,7 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int allDead() {
-        return records.size() - deadAnimals.size();
+        return numberOfAllAnimals-deadAnimals;
     }
 
     public void addDay() {
@@ -60,13 +58,7 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int avgAgeForDead() {
-        int n = 0;
-        int wyn = 0;
-        for (Animal animal : deadAnimals) {
-            n++;
-            wyn += animal.getAge();
-        }
-        return wyn / n;
+        return sumOfAge/deadAnimals;
     }
 
 
@@ -155,7 +147,7 @@ public class Globe implements WorldMap, BoundsValidator {
             }
         }
         else if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
-            color = "lightpurple";
+            color = "BLUEVIOLET";
         }
         else color = "lightyellow";
         return color;
@@ -223,8 +215,7 @@ public class Globe implements WorldMap, BoundsValidator {
         for (int i = 0; i < parameters.getInitialAnimalsNumber(); i++) {
             Vector2d position = new Vector2d(random.nextInt(upperRight.getX()), random.nextInt(upperRight.getY()));
             Animal animal = new Animal(position, parameters.getInitialEnergy(), parameters.getGenotypeLength(), animalCount++);
-            records.add(animal);
-            descendantTree.add(new ArrayList<>());
+            numberOfAllAnimals++;
             animals.get(position).add(animal);
             if(mostPopular.get(animal.getGenotype())==null)
                 mostPopular.put(animal.getGenotype(),0);
@@ -277,7 +268,8 @@ public class Globe implements WorldMap, BoundsValidator {
         }
         for (Animal animal : tmpList) {
             animals.get(animal.getPosition()).remove(animal);
-            deadAnimals.add(animal);
+            sumOfAge+=animal.getAge();
+            deadAnimals++;
         }
     }
 
@@ -291,11 +283,8 @@ public class Globe implements WorldMap, BoundsValidator {
                 Animal animal2 = values.get(1);
                 if (animal1.canBreed(parameters.getBreedNeededEnergy()) && animal2.canBreed(parameters.getBreedNeededEnergy())) {
                     Animal newAnimal = Animal.breed(animal1, animal2, parameters.getBreedLostEnergy(), parameters.getMutationVariant(), parameters.getMinMutations(), parameters.getMaxMutations(), animalCount++);
-                    records.add(newAnimal);
+                    numberOfAllAnimals++;
                     place(newAnimal, newAnimal.getPosition());
-                    descendantTree.get(animal1.getHisNumber()).add(animalCount - 1);
-                    descendantTree.get(animal2.getHisNumber()).add(animalCount - 1);
-                    descendantTree.add(new ArrayList<>());
                     if(mostPopular.get(newAnimal.getGenotype())==null)
                         mostPopular.put(newAnimal.getGenotype(),0);
                     mostPopular.put(newAnimal.getGenotype(),mostPopular.get(newAnimal.getGenotype())+1);
@@ -366,16 +355,24 @@ public class Globe implements WorldMap, BoundsValidator {
     public boolean isOccupied(Vector2d position) {
         return objectAt(position) != null;
     }
-
+    private boolean focusCheck(Animal animal){
+        Random random=new Random();
+        if(grasses.get(animal.getPosition())!=null){
+            if(random.nextInt(100)<=20) {
+                if(grasses.get(animal.getPosition()).getEnergy()<0)
+                    return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void move(Animal animal) {
         animals.get(animal.getPosition()).remove(animal);
         animal.move(this);
+        if(focusCheck(animal))
+            animal.move(this);
         animals.get(animal.getPosition()).add(animal);
     }
-
-
-    //Ogólnie tej funcki nie potrzebujemy bo nic nie placujemy
     @Override
     public void place(Animal animal, Vector2d position) {
         if (boundsValidator(position)) {
