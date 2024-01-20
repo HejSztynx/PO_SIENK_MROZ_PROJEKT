@@ -4,7 +4,7 @@ import agh.proj.model.interfaces.BoundsValidator;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
-import agh.proj.model.variants.MapVariant;
+import agh.proj.model.variants.FoliageVariant;
 
 import java.util.*;
 
@@ -23,16 +23,31 @@ public class Globe implements WorldMap, BoundsValidator {
     private int day = 0;
     private Map<Vector2d, List<Animal>> animals = new HashMap<>();
     private Map<Genotype, Integer> mostPopular = new HashMap<>();
-
+    private Set<Vector2d> emptySpacesJungle = new HashSet<>();
+    private Set<Vector2d> emptySpacesPlains = new HashSet<>();
     public Globe(int width, int height, Parameters parameters) {
         upperRight = new Vector2d(width, height);
         this.parameters = parameters;
         generateJungle();
-        if (parameters.getMapVariant() == MapVariant.SWAMP)
+        if (parameters.getFoliageVariant() == FoliageVariant.POISONOUS_PLANTS)
             generateSwamp();
+        emptySpacesInitialazie();
         initialGrassGenerator();
         initialAnimalMap();
         initialAnimalsGenerator();
+
+    }
+
+    private void emptySpacesInitialazie() {
+        for (int i = 0; i < upperRight.getY() + 1; i++) {
+            for (int j = 0; j < upperRight.getX() + 1; j++) {
+                Vector2d position = new Vector2d(j, i);
+                if (biomes.get("Jungle").boundsValidator(position))
+                    emptySpacesJungle.add(position);
+                else
+                    emptySpacesPlains.add(position);
+            }
+        }
     }
 
     public int allDead() {
@@ -53,17 +68,6 @@ public class Globe implements WorldMap, BoundsValidator {
         return wyn / n;
     }
 
-    public int numberOfDescendants() {
-        return numberOfDescendatns(0);
-    }
-
-    private int numberOfDescendatns(int res) {
-//        res+=
-//        for(int i=0;i<descendantTree.size();i++){
-//
-//        }
-        return 1;
-    }
 
     public int avgEnergy() {
         if(allDead()==0)
@@ -120,76 +124,80 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int numberOfEmptySpaces() {
-
         return ((upperRight.getX()+1) * (upperRight.getY()+1) - grasses.size());
-//        int wyn = 0;
-//        for (int i = 0; i < upperRight.getY() + 1; i++) {
-//            for (int j = 0; j < upperRight.getX() + 1; j++) {
-//                if (isOccupied(new Vector2d(j, i))==false)
-//                    wyn++;
-//            }
-//        }
-//        return wyn;
     }
 
     private void generateJungle() {
-        int jungleHeight = (int) (upperRight.getY() / sqrt(5));
-        int jungleWidth = (int) (upperRight.getX() / sqrt(5));
-        Biome jungle = new Biome(new Vector2d((upperRight.getX() - jungleWidth) / 2, (upperRight.getY() - jungleHeight) / 2), new Vector2d((upperRight.getX() - jungleWidth) / 2 + jungleWidth, (upperRight.getY() - jungleHeight) / 2 + jungleHeight));
+        int jungleHeight = (int) (upperRight.getY() / 5);
+        int jungleWidth = (int) (upperRight.getX());
+        Biome jungle = new Biome(new Vector2d(0, 3 * (upperRight.getY() - jungleHeight) / 5), new Vector2d(upperRight.getX(), 3 * (upperRight.getY() - jungleHeight) / 5 + jungleHeight));
         biomes.put("Jungle", jungle);
     }
 
     private void generateSwamp() {
         Random random = new Random();
-        int startWidth = random.nextInt(0, (int) ((upperRight.getX() * 4) / sqrt(5)));
-        int startHeight = random.nextInt(0, (int) ((upperRight.getY() * 4) / sqrt(5)));
+        int startWidth = random.nextInt(0, (int) ((upperRight.getX()) / sqrt(4)));
+        int startHeight = random.nextInt(0, (int) ((upperRight.getY()) / sqrt(5)));
         int swampHeight = (int) (upperRight.getY() / sqrt(5));
-        int swampWidth = (int) (upperRight.getX() / sqrt(5));
+        int swampWidth = (int) (upperRight.getX() / sqrt(4));
         Biome jungle = new Biome(new Vector2d(startWidth, startHeight), new Vector2d(startWidth + swampWidth, startHeight + swampHeight));
         biomes.put("Swamp", jungle);
     }
 
     private void initialGrassGenerator() {
         Random random = new Random();
-        for (int i = 0; i < parameters.getInitialPlantsQuantity(); ) {
+        for (int i = 0; i < parameters.getInitialPlantsQuantity();i++ ) {
             Vector2d position = new Vector2d(random.nextInt(upperRight.getX()), random.nextInt(upperRight.getY()));
             Grass grass = new Grass(parameters.getConsumedPlantEnergy(), position);
             if (grasses.get(position) == null) {
                 grasses.put(position, grass);
-                i++;
+                if (biomes.get("Jungle").boundsValidator(position))
+                    emptySpacesJungle.remove(position);
+                else
+                    emptySpacesPlains.remove(position);
             }
         }
     }
 
     public void dayGrassGenerator() {
         GrassGenerator generator = new GrassGenerator();
+        Random random = new Random();
         int grassCount = 0;
-        for (int i = 0; i < upperRight.getY()+1; i++) {
-            for (int j = 0; j < upperRight.getX()+1; j++) {
-                Vector2d position = new Vector2d(j, i);
-                Grass grass = null;
-                if (parameters.getMapVariant() == MapVariant.SWAMP)
-                    grass = generator.generateGrass(biomes.get("Jungle").boundsValidator(position), 50, parameters.getConsumedPlantEnergy(), position);
-                else
-                    grass = generator.generateGrass(biomes.get("Jungle").boundsValidator(position), 0, parameters.getConsumedPlantEnergy(), position);
-                if (grass.getEnergy() != 0) {
-                    if(grasses.get(position)==null)
-                    {
-                        grasses.put(position,grass);
-                        grassCount+=1;
-                    }
+        for (int i = 0; i < parameters.getPlantsGrowingADay();) {
+            Vector2d position = null;
+            if (random.nextInt(100) < 80) {
+                if(!emptySpacesJungle.isEmpty()) {
+                    position = (Vector2d) emptySpacesJungle.toArray()[random.nextInt(emptySpacesJungle.size())];
+                    emptySpacesJungle.remove(position);
                 }
-                if (numberOfEmptySpaces() <=0 || grassCount >= parameters.getPlantsGrowingADay())
-                {
-
-                    return;
-                }
-                else if (i >= upperRight.getY() && j >= upperRight.getX()) {
-                    i = 0;
-                    System.out.println(grassCount+"/"+parameters.getPlantsGrowingADay()+":"+numberOfEmptySpaces());
-                }
-
             }
+            else {
+                if(!emptySpacesPlains.isEmpty())
+                {
+                    position= (Vector2d) emptySpacesPlains.toArray()[random.nextInt(emptySpacesPlains.size())];
+                    emptySpacesPlains.remove(position);
+                }
+            }
+            if(position!=null)
+            {
+                Grass grass=null;
+                boolean swampChcker=false;
+                if(biomes.containsKey("Swamp"))
+                    if(biomes.get("Swamp").boundsValidator(position))
+                        swampChcker=true;
+                if(swampChcker)
+                {
+                    grass=new GrassGenerator().generateGrass(50, parameters.getConsumedPlantEnergy(), position);
+                }
+                else
+                {
+                    grass=new GrassGenerator().generateGrass(0, parameters.getConsumedPlantEnergy(), position);
+                }
+                grasses.put(position,grass);
+                i++;
+            }
+            if(numberOfEmptySpaces()==0)
+                return;
         }
     }
 
@@ -228,6 +236,10 @@ public class Globe implements WorldMap, BoundsValidator {
                 Collections.sort(values, new AnimalComparator());
                 //System.out.println(values+"->"+grasses.get(key).getEnergy()+"->");
                 values.get(0).eat(grasses.get(key));
+                if(biomes.get("Jungle").boundsValidator(key))
+                    emptySpacesJungle.add(key);
+                else
+                    emptySpacesPlains.add(key);
                 grasses.remove(key);
                 //System.out.println(values);
             }
