@@ -4,7 +4,7 @@ import agh.proj.model.interfaces.BoundsValidator;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
-import agh.proj.model.variants.MapVariant;
+import agh.proj.model.variants.FoliageVariant;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class Globe implements WorldMap, BoundsValidator {
         upperRight = new Vector2d(width, height);
         this.parameters = parameters;
         generateJungle();
-        if (parameters.getMapVariant() == MapVariant.SWAMP)
+        if (parameters.getFoliageVariant() == FoliageVariant.POISONOUS_PLANTS)
             generateSwamp();
         emptySpacesInitialazie();
         initialGrassGenerator();
@@ -178,17 +178,21 @@ public class Globe implements WorldMap, BoundsValidator {
                     emptySpacesPlains.remove(position);
                 }
             }
-            Grass grass=null;
-            if(biomes.containsKey("Swamp"))
-            {
-                grass=new GrassGenerator().generateGrass(50, parameters.getConsumedPlantEnergy(), position);
-            }
-            else
-            {
-                grass=new GrassGenerator().generateGrass(0, parameters.getConsumedPlantEnergy(), position);
-            }
             if(position!=null)
             {
+                Grass grass=null;
+                boolean swampChcker=false;
+                if(biomes.containsKey("Swamp"))
+                    if(biomes.get("Swamp").boundsValidator(position))
+                        swampChcker=true;
+                if(swampChcker)
+                {
+                    grass=new GrassGenerator().generateGrass(50, parameters.getConsumedPlantEnergy(), position);
+                }
+                else
+                {
+                    grass=new GrassGenerator().generateGrass(0, parameters.getConsumedPlantEnergy(), position);
+                }
                 grasses.put(position,grass);
                 i++;
             }
