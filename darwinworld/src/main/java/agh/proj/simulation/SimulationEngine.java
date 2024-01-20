@@ -24,4 +24,10 @@ public class SimulationEngine {
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.SECONDS);
     }
+
+    synchronized public void pauseResumeThreads(boolean pause) {
+        for (Simulation simulation : simulations) {
+            simulation.setPause(pause);
+        }
+    }
 }

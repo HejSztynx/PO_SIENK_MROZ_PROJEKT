@@ -27,7 +27,7 @@ public class Globe implements WorldMap, BoundsValidator {
     private Set<Vector2d> emptySpacesJungle = new HashSet<>();
     private Set<Vector2d> emptySpacesPlains = new HashSet<>();
     public Globe(int width, int height, Parameters parameters) {
-        upperRight = new Vector2d(width, height);
+        upperRight = new Vector2d(width - 1, height - 1);
         this.parameters = parameters;
         generateJungle();
         if (parameters.getFoliageVariant() == FoliageVariant.POISONOUS_PLANTS)

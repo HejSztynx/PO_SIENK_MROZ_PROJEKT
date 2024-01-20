@@ -10,10 +10,15 @@ public class Simulation implements Runnable {
     private Globe worldMap;
     private MapVisualizer mapVisualizer;
     private final ArrayList<MapChangeListener> subscribers = new ArrayList<>();
+    private boolean pause = false;
 
     public Simulation(Globe worldMap) {
         this.worldMap = worldMap;
         mapVisualizer = new MapVisualizer(worldMap);
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 
     public void register(MapChangeListener subscriber) {
@@ -30,6 +35,15 @@ public class Simulation implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+            while (pause) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             worldMap.dayCleaner();
             System.out.println(worldMap.allDead() + ":DeadAnimals");
             worldMap.dayMovesAnimal();
