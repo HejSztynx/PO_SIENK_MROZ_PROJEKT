@@ -15,4 +15,6 @@ public interface WorldMap extends MoveValidator {
     boolean isOccupied(Vector2d position);
 
     Vector2d getBounds();
+
+    String biomeColor(int x, int y);
 }

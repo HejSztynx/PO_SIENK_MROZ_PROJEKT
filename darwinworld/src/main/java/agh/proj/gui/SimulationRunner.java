@@ -13,9 +13,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,18 +86,25 @@ public class SimulationRunner implements MapChangeListener {
             GridPane.setHalignment(label, HPos.CENTER);
         }
 
-
-
-
         for (int i = 1; i < xDim; i++) {
             for (int j = 1; j < yDim; j++) {
-                label = new Label();
                 WorldElement worldElement = worldMap.objectAt(new Vector2d(i - 1, j - 1));
+
+                StackPane tile = new StackPane();
+//                    tile.setStyle("-fx-background-color: lightgreen");
+                tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
+
+
+                Border border = new Border(new BorderStroke(Color.BLACK,
+                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+                tile.setBorder(border);
+
+
                 if (worldElement != null) {
-                    label.setText(worldElement.toString());
-                    GridPane.setHalignment(label, HPos.CENTER);
-                    mapGrid.add(label, i, yDim - j);
+                    Text text = new Text(worldElement.toString());
+                    tile.getChildren().addAll(text);
                 }
+                mapGrid.add(tile, i, yDim - j);
             }
         }
     }

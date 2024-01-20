@@ -1,6 +1,0 @@
-preset,mapHeight,mapWidth,mapVariant,initialPlantsQuantity,consumedPlantEnergy,plantsGrowingADay,foliageVariant,initialAnimalsNumber,initialEnergy,breedNeededEnergy,breedLostEnergy,minMutations,maxMutations,mutationVariant,genotypeLength,behaviorVariant
-preset 1,10,10,Globe,5,5,10,Verdant Equator,1,100,5,5,0,0,Fully Random,5,Full Predestination
-
-preset 2,10,10,Globe,5,0,10,Verdant Equator,1,100,5,5,0,0,Fully Random,5,Full Predestination
-
-preset 3,10,10,Globe,0,0,0,Verdant Equator,1,10,5,5,0,0,Fully Random,5,Full Predestination
