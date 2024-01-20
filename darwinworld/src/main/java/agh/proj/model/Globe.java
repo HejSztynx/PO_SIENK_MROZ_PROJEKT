@@ -282,6 +282,9 @@ public class Globe implements WorldMap, BoundsValidator {
                     if(mostPopular.get(newAnimal.getGenotype())==null)
                         mostPopular.put(newAnimal.getGenotype(),0);
                     mostPopular.put(newAnimal.getGenotype(),mostPopular.get(newAnimal.getGenotype())+1);
+                    animal1.getsDescendant();
+                    animal2.getsDescendant();
+                    newAnimal.setParents(animal1,animal2);
                     //System.out.println(values+"->"+key);
                 }
             }
