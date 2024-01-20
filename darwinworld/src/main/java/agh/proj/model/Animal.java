@@ -15,6 +15,9 @@ public class Animal implements WorldElement {
     private int age = 0;
     private int noOfChildren = 0;
     private int numberOfEatedGrass = 0;
+    private Animal animalParent1=null;
+    private Animal animalParent2=null;
+    private int numberOfDescendats=0;
 
     public Animal(Vector2d position, Genotype genotype, int energy, int dateOfBirth, int hisNumber) {
         this.position = position;
@@ -29,7 +32,22 @@ public class Animal implements WorldElement {
     public Animal(Vector2d position, int energy, int genoTypeLength, int hisNumber) {
         this(position, Genotype.randomGenotype(genoTypeLength), energy, 0, hisNumber);
     }
-
+    public void setParents(Animal animalParent1,Animal animalParent2)
+    {
+        this.animalParent1=animalParent1;
+        this.animalParent2=animalParent2;
+    }
+    public int getNumberOfDescendats()
+    {
+        return  numberOfDescendats;
+    }
+    public void getsDescendant(){
+        this.numberOfDescendats++;
+        if(animalParent1!=null)
+            animalParent1.getsDescendant();
+        if(animalParent2!=null)
+            animalParent2.getsDescendant();
+    }
     public static Animal breed(Animal animal1, Animal animal2, int breedEnergy, MutationVariant mutationVariant, int minMutation, int maxMutation, int hisNumber) {
         animal1.getsChild();
         animal1.energy -= breedEnergy;
