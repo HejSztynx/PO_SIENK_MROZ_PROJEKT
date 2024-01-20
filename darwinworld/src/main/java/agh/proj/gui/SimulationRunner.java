@@ -1,5 +1,6 @@
 package agh.proj.gui;
 
+import agh.proj.model.Animal;
 import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
 import agh.proj.model.Vector2d;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -29,6 +31,8 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private Button pauseResumeButton;
     private SimulationEngine se = null;
+    @FXML
+    private ListView<String> animalList;
 
     public void initialize() {
         if (parameters == null) {
@@ -51,6 +55,16 @@ public class SimulationRunner implements MapChangeListener {
         }
     }
 
+    private void initializeAnimalList() {
+        ArrayList<Animal> animals = worldMap.getAnimals();
+        int number;
+        animalList.getItems().clear();
+        for (Animal animal : animals) {
+            number = animal.getHisNumber() + 1;
+            animalList.getItems().add("Animal " + number);
+        }
+    }
+
     public void setParameters(Parameters parameters) {
         this.parameters = parameters;
         initialize();
@@ -70,6 +84,7 @@ public class SimulationRunner implements MapChangeListener {
     @Override
     public void mapChanged() {
         Platform.runLater(this::drawMap);
+        initializeAnimalList();
     }
 
     private void drawGrid() {
@@ -104,7 +119,6 @@ public class SimulationRunner implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(new Vector2d(i - 1, j - 1));
 
                 StackPane tile = new StackPane();
-//                    tile.setStyle("-fx-background-color: lightgreen");
                 tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
 
 

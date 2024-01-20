@@ -6,17 +6,23 @@
 <?import javafx.scene.layout.GridPane?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ListView?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             minHeight="700.0" minWidth="500.0"
             fx:controller="agh.proj.gui.SimulationRunner">
 
     <center>
-        <VBox spacing="20" alignment="CENTER">
-            <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
-            <GridPane fx:id = "mapGrid" gridLinesVisible="true" alignment="CENTER"/>
-            <Button fx:id="pauseResumeButton" onAction="#simulationPauseResumeClicked" text="PAUSE"/>
-        </VBox>
+        <HBox spacing="20" alignment="CENTER">
+            <ListView fx:id="animalList"/>
+            <VBox spacing="20" alignment="CENTER">
+                <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
+                <GridPane fx:id = "mapGrid" gridLinesVisible="true" alignment="CENTER"/>
+                <Button fx:id="pauseResumeButton" onAction="#simulationPauseResumeClicked" text="PAUSE"/>
+            </VBox>
+        </HBox>
+
     </center>
 
 </BorderPane>

@@ -12,7 +12,7 @@ import java.util.*;
 import static java.lang.Math.sqrt;
 
 public class Globe implements WorldMap, BoundsValidator {
-    private static int animalCount = 0;
+    private int animalCount = 0;
     private final Vector2d lowerLeft = new Vector2d(0, 0);
     private final Vector2d upperRight;
     private final List<Animal> records = new ArrayList<>();
@@ -37,6 +37,15 @@ public class Globe implements WorldMap, BoundsValidator {
         initialAnimalMap();
         initialAnimalsGenerator();
 
+    }
+
+    public ArrayList<Animal> getAnimals() {
+        ArrayList<Animal> allAnimals = new ArrayList<>();
+        for (List<Animal> animalList : animals.values()) {
+            allAnimals.addAll(animalList);
+        }
+
+        return allAnimals;
     }
 
     private void emptySpacesInitialazie() {
