@@ -93,7 +93,7 @@ public class GlobeAssistant {
                         animal1.getsDescendant();
                         animal2.getsDescendant();
                         newAnimal.setParents(animal1,animal2);
-                        //System.out.println(values+"->"+key);
+                        globe.getRecords().add(newAnimal);
                     }
                 }
             }
@@ -143,6 +143,7 @@ public class GlobeAssistant {
             globe.getAnimals().get(animal.getPosition()).remove(animal);
             globe.increseSumOfAge(animal.getAge());
             globe.increseDead();
+            animal.die();
         }
     }
 }

@@ -19,11 +19,14 @@ public class Globe implements WorldMap, BoundsValidator {
     private final Parameters parameters;
     private int day = 0;
     private Map<Vector2d, List<Animal>> animals = new HashMap<>();
+    private ArrayList<Animal> records=new ArrayList<>();
 
     public Map<Genotype, Integer> getMostPopular() {
         return mostPopular;
     }
-
+    public ArrayList<Animal> getRecords(){
+        return records;
+    }
     private Map<Genotype, Integer> mostPopular = new HashMap<>();
     private Set<Vector2d> emptySpacesJungle = new HashSet<>();
     private Set<Vector2d> emptySpacesPlains = new HashSet<>();
@@ -85,6 +88,7 @@ public class Globe implements WorldMap, BoundsValidator {
         for (int i = 0; i < upperRight.getY() + 1; i++) {
             for (int j = 0; j < upperRight.getX() + 1; j++) {
                 animals.put(new Vector2d(j, i), new ArrayList<Animal>());
+
             }
         }
     }
@@ -166,6 +170,7 @@ public class Globe implements WorldMap, BoundsValidator {
             if(mostPopular.get(animal.getGenotype())==null)
                 mostPopular.put(animal.getGenotype(),0);
             mostPopular.put(animal.getGenotype(),mostPopular.get(animal.getGenotype())+1);
+            records.add(animal);
         }
     }
     public void increseSumOfAge(int age){

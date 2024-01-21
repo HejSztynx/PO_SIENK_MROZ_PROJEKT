@@ -17,6 +17,8 @@ public class Animal implements WorldElement {
     private Animal animalParent1=null;
     private Animal animalParent2=null;
     private int numberOfDescendats=0;
+    private boolean alive=true;
+
 
     public Animal(Vector2d position, Genotype genotype, int energy, int dateOfBirth) {
         this.position = position;
@@ -57,7 +59,8 @@ public class Animal implements WorldElement {
     public Vector2d getPosition() {
         return position;
     }
-
+    public boolean isAlive(){return alive;}
+    public void die(){ alive=false;}
     public int getEnergy() {
         return energy;
     }
