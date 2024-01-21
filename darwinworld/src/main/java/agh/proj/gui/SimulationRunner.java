@@ -12,8 +12,8 @@ import agh.proj.simulation.SimulationEngine;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -30,8 +30,24 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private Button pauseResumeButton;
     private SimulationEngine se = null;
+
     @FXML
-    private ListView<String> animalList;
+    private TextField animalNumber;
+    @FXML
+    private TextField grassNumber;
+    @FXML
+    private TextField freeSpaces;
+    @FXML
+    private TextField popularGenotype;
+    @FXML
+    private TextField averageEnergy;
+    @FXML
+    private TextField averageLifeSpan;
+    @FXML
+    private TextField averageChildren;
+
+    @FXML
+    private VBox list;
     private int toTrack = 0;
     @FXML
     private Label tracked;
@@ -43,6 +59,14 @@ public class SimulationRunner implements MapChangeListener {
     private TextField genomeTrack;
     @FXML
     private TextField energyTrack;
+    @FXML
+    private TextField eatenGrassTrack;
+    @FXML
+    private TextField childrenTrack;
+    @FXML
+    private TextField descendantsTrack;
+    @FXML
+    private TextField deathTrack;
 
     public void initialize() {
         if (parameters == null) {
@@ -65,21 +89,45 @@ public class SimulationRunner implements MapChangeListener {
         }
     }
 
+    private void initializeMapStats() {
+        animalNumber.setText(String.valueOf(worldMap.getAnimalCount()));
+        grassNumber.setText(String.valueOf(worldMap.getGrassCount()));
+        freeSpaces.setText(String.valueOf(worldMap.numberOfEmptySpaces()));
+        popularGenotype.setText(worldMap.mostPopularGenome().toString());
+        averageEnergy.setText(String.valueOf(worldMap.avgEnergy()));
+        if (worldMap.avgAgeForDead() != -1)
+            averageLifeSpan.setText(String.valueOf(worldMap.avgAgeForDead()));
+        averageChildren.setText(String.valueOf(worldMap.avgChildren()));
+    }
+
     private void initializeAnimalList() {
         Platform.runLater(() -> {
+            initializeMapStats();
+
             int animalCount = worldMap.getAnimalCount();
             System.out.println(animalCount);
-            animalList.getItems().clear();
-            for (int i = 1; i <= animalCount; i++) {
-                animalList.getItems().add("Animal " + i);
-            }
 
-            animalList.setOnMouseClicked(this::handleAnimalListClick);
+            list.getChildren().clear();
+            for (int i = 1; i <= animalCount; i++) {
+                Label animalLabel = new Label("Animal " + i);
+                if (worldMap.getAnimal(i - 1) == null) {
+                    animalLabel.setTextFill(Color.RED);
+                }
+                if (i == toTrack) {
+                    animalLabel.setStyle("-fx-font-weight: bold");
+                }
+                animalLabel.setPadding(new Insets(10));
+                animalLabel.setBorder(new Border(new javafx.scene.layout.BorderStroke(Color.BLACK,
+                        javafx.scene.layout.BorderStrokeStyle.SOLID, null, new javafx.scene.layout.BorderWidths(1))));
+
+                list.getChildren().add(animalLabel);
+                animalLabel.setOnMouseClicked(event -> handleAnimalLabelClick(animalLabel));
+            }
         });
     }
 
-    private void handleAnimalListClick(MouseEvent event) {
-        String selectedItem = animalList.getSelectionModel().getSelectedItem();
+    private void handleAnimalLabelClick(Label label) {
+        String selectedItem = label.getText();
         if (selectedItem == null) return;
 
         tracked.setText(selectedItem);
@@ -98,10 +146,17 @@ public class SimulationRunner implements MapChangeListener {
         ageTrack.setText(String.valueOf(animal.getAge()));
         genomeTrack.setText(String.valueOf(animal.getGenotype()));
         energyTrack.setText(String.valueOf(animal.getEnergy()));
+        eatenGrassTrack.setText(String.valueOf(animal.getNumberOfEatedGrass()));
+        childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
+        descendantsTrack.setText(String.valueOf(animal.getNumberOfDescendats()));
+        if (animal.getEnergy() == 0)
+            deathTrack.setText("DEAD");
+        else
+            deathTrack.setText("ALIVE");
     }
 
     private void trackedDead() {
-        positionTrack.setText("DEAD");
+        positionTrack.setText("naprawie to");
         ageTrack.setText("DEAD");
         genomeTrack.setText("DEAD");
         energyTrack.setText("DEAD");

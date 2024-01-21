@@ -16,8 +16,38 @@
 
     <center>
         <HBox spacing="20" alignment="CENTER">
-            <VBox alignment="CENTER" maxWidth="100">
-                <ListView fx:id="animalList"/>
+            <VBox alignment="CENTER" spacing="20">
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="Number of animals"/>
+                    <TextField fx:id="animalNumber" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="Number of Grass"/>
+                    <TextField fx:id="grassNumber" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="Number of free spaces"/>
+                    <TextField fx:id="freeSpaces" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="Most popular genotype"/>
+                    <TextField fx:id="popularGenotype" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="Average animal energy"/>
+                    <TextField fx:id="averageEnergy" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="average animal lifespan"/>
+                    <TextField fx:id="averageLifeSpan" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="average number of children"/>
+                    <TextField fx:id="averageChildren" editable="false"/>
+                </VBox>
+            </VBox>
+            <VBox fx:id="list" alignment="CENTER" maxWidth="100">
+<!--                <ListView fx:id="animalList"/>-->
             </VBox>
             <VBox spacing="20" alignment="CENTER">
                 <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
@@ -38,12 +68,28 @@
                     <TextField fx:id="ageTrack" editable="false"/>
                 </VBox>
                 <VBox>
+                    <Label style="-fx-font-weight: bold">Eaten grass</Label>
+                    <TextField fx:id="eatenGrassTrack" editable="false"/>
+                </VBox>
+                <VBox>
                     <Label style="-fx-font-weight: bold">Genome</Label>
                     <TextField fx:id="genomeTrack" editable="false"/>
                 </VBox>
                 <VBox>
                     <Label style="-fx-font-weight: bold">Energy</Label>
                     <TextField fx:id="energyTrack" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Number of children</Label>
+                    <TextField fx:id="childrenTrack" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Number of descendants</Label>
+                    <TextField fx:id="descendantsTrack" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Life status</Label>
+                    <TextField fx:id="deathTrack" editable="false"/>
                 </VBox>
             </VBox>
         </HBox>

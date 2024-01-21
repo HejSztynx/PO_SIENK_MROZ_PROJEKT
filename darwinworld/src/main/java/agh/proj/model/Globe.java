@@ -5,7 +5,6 @@ import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
 import agh.proj.model.util.AnimalComparator;
 import agh.proj.model.variants.FoliageVariant;
-import agh.proj.model.variants.MapVariant;
 
 import java.util.*;
 
@@ -26,13 +25,14 @@ public class Globe implements WorldMap, BoundsValidator {
     private Map<Genotype, Integer> mostPopular = new HashMap<>();
     private Set<Vector2d> emptySpacesJungle = new HashSet<>();
     private Set<Vector2d> emptySpacesPlains = new HashSet<>();
+
     public Globe(int width, int height, Parameters parameters) {
         upperRight = new Vector2d(width - 1, height - 1);
         this.parameters = parameters;
         generateJungle();
         if (parameters.getFoliageVariant() == FoliageVariant.POISONOUS_PLANTS)
             generateSwamp();
-        emptySpacesInitialazie();
+        emptySpacesInitialize();
         initialGrassGenerator();
         initialAnimalMap();
         initialAnimalsGenerator();
@@ -41,6 +41,10 @@ public class Globe implements WorldMap, BoundsValidator {
 
     public int getAnimalCount() {
         return animalCount;
+    }
+
+    public int getGrassCount() {
+        return grasses.size();
     }
 
     public Animal getAnimal(int n) {
@@ -52,7 +56,7 @@ public class Globe implements WorldMap, BoundsValidator {
         return null;
     }
 
-    private void emptySpacesInitialazie() {
+    private void emptySpacesInitialize() {
         for (int i = 0; i < upperRight.getY() + 1; i++) {
             for (int j = 0; j < upperRight.getX() + 1; j++) {
                 Vector2d position = new Vector2d(j, i);
@@ -79,6 +83,7 @@ public class Globe implements WorldMap, BoundsValidator {
             n++;
             wyn += animal.getAge();
         }
+        if (n == 0) return -1;
         return wyn / n;
     }
 
@@ -119,7 +124,7 @@ public class Globe implements WorldMap, BoundsValidator {
         return wyn / n;
     }
 
-    public Genotype mostPopularGenom() {
+    public Genotype mostPopularGenome() {
         Genotype wyn = null;
         int animals_with_it = 0;
         for (Map.Entry<Genotype, Integer> entry : mostPopular.entrySet()) {
