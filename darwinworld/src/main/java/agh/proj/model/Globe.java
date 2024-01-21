@@ -39,13 +39,17 @@ public class Globe implements WorldMap, BoundsValidator {
 
     }
 
-    public ArrayList<Animal> getAnimals() {
-        ArrayList<Animal> allAnimals = new ArrayList<>();
-        for (List<Animal> animalList : animals.values()) {
-            allAnimals.addAll(animalList);
-        }
+    public int getAnimalCount() {
+        return animalCount;
+    }
 
-        return allAnimals;
+    public Animal getAnimal(int n) {
+        for (List<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                if (animal.getHisNumber() == n) return animal;
+            }
+        }
+        return null;
     }
 
     private void emptySpacesInitialazie() {

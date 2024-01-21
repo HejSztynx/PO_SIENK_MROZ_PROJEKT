@@ -20,5 +20,7 @@ public interface WorldMap extends MoveValidator {
 
     String biomeColor(int x, int y);
 
-    ArrayList<Animal> getAnimals();
+    Animal getAnimal(int n);
+
+    int getAnimalCount();
 }

@@ -12,9 +12,8 @@ import agh.proj.simulation.SimulationEngine;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -33,6 +32,17 @@ public class SimulationRunner implements MapChangeListener {
     private SimulationEngine se = null;
     @FXML
     private ListView<String> animalList;
+    private int toTrack = 0;
+    @FXML
+    private Label tracked;
+    @FXML
+    private TextField positionTrack;
+    @FXML
+    private TextField ageTrack;
+    @FXML
+    private TextField genomeTrack;
+    @FXML
+    private TextField energyTrack;
 
     public void initialize() {
         if (parameters == null) {
@@ -56,13 +66,45 @@ public class SimulationRunner implements MapChangeListener {
     }
 
     private void initializeAnimalList() {
-        ArrayList<Animal> animals = worldMap.getAnimals();
-        int number;
-        animalList.getItems().clear();
-        for (Animal animal : animals) {
-            number = animal.getHisNumber() + 1;
-            animalList.getItems().add("Animal " + number);
+        Platform.runLater(() -> {
+            int animalCount = worldMap.getAnimalCount();
+            System.out.println(animalCount);
+            animalList.getItems().clear();
+            for (int i = 1; i <= animalCount; i++) {
+                animalList.getItems().add("Animal " + i);
+            }
+
+            animalList.setOnMouseClicked(this::handleAnimalListClick);
+        });
+    }
+
+    private void handleAnimalListClick(MouseEvent event) {
+        String selectedItem = animalList.getSelectionModel().getSelectedItem();
+        if (selectedItem == null) return;
+
+        tracked.setText(selectedItem);
+        String number = selectedItem.split(" ")[1];
+        toTrack = Integer.parseInt(number);
+    }
+
+    private void updateTracking() {
+        if (toTrack == 0) return;
+        Animal animal = worldMap.getAnimal(toTrack - 1);
+        if (animal == null) {
+            trackedDead();
+            return;
         }
+        positionTrack.setText(String.valueOf(animal.getPosition()));
+        ageTrack.setText(String.valueOf(animal.getAge()));
+        genomeTrack.setText(String.valueOf(animal.getGenotype()));
+        energyTrack.setText(String.valueOf(animal.getEnergy()));
+    }
+
+    private void trackedDead() {
+        positionTrack.setText("DEAD");
+        ageTrack.setText("DEAD");
+        genomeTrack.setText("DEAD");
+        energyTrack.setText("DEAD");
     }
 
     public void setParameters(Parameters parameters) {
@@ -85,6 +127,7 @@ public class SimulationRunner implements MapChangeListener {
     public void mapChanged() {
         Platform.runLater(this::drawMap);
         initializeAnimalList();
+        updateTracking();
     }
 
     private void drawGrid() {
@@ -142,7 +185,7 @@ public class SimulationRunner implements MapChangeListener {
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0));
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }

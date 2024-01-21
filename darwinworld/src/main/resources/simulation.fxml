@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             minHeight="700.0" minWidth="500.0"
@@ -15,11 +16,35 @@
 
     <center>
         <HBox spacing="20" alignment="CENTER">
-            <ListView fx:id="animalList"/>
+            <VBox alignment="CENTER" maxWidth="100">
+                <ListView fx:id="animalList"/>
+            </VBox>
             <VBox spacing="20" alignment="CENTER">
                 <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
                 <GridPane fx:id = "mapGrid" gridLinesVisible="true" alignment="CENTER"/>
                 <Button fx:id="pauseResumeButton" onAction="#simulationPauseResumeClicked" text="PAUSE"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="20" maxWidth="100">
+                <VBox>
+                    <Label style="-fx-font-weight: bold" text="Tracked:"/>
+                    <Label fx:id="tracked" style="-fx-font-weight: bold" text="None"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Position</Label>
+                    <TextField fx:id="positionTrack" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Age</Label>
+                    <TextField fx:id="ageTrack" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Genome</Label>
+                    <TextField fx:id="genomeTrack" editable="false"/>
+                </VBox>
+                <VBox>
+                    <Label style="-fx-font-weight: bold">Energy</Label>
+                    <TextField fx:id="energyTrack" editable="false"/>
+                </VBox>
             </VBox>
         </HBox>
 
