@@ -1,6 +1,7 @@
 package agh.proj.simulation;
 
 import agh.proj.model.Globe;
+import agh.proj.model.GlobeAssistant;
 import agh.proj.model.interfaces.MapChangeListener;
 import agh.proj.model.util.MapVisualizer;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 
 public class Simulation implements Runnable {
     private Globe worldMap;
+    private GlobeAssistant assistant;
     private MapVisualizer mapVisualizer;
     private final ArrayList<MapChangeListener> subscribers = new ArrayList<>();
     private boolean pause = false;
@@ -15,6 +17,7 @@ public class Simulation implements Runnable {
     public Simulation(Globe worldMap) {
         this.worldMap = worldMap;
         mapVisualizer = new MapVisualizer(worldMap);
+        this.assistant=new GlobeAssistant(worldMap);
     }
 
     public void setPause(boolean pause) {
@@ -38,20 +41,20 @@ public class Simulation implements Runnable {
 
             while (pause) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-            worldMap.dayCleaner();
+            assistant.dayCleaner();
             System.out.println(worldMap.allDead() + ":DeadAnimals");
-            worldMap.dayMovesAnimal();
-            worldMap.dayEating();
-            System.out.println(worldMap.avgEnergy() + ":Avg Energy");
-            worldMap.dayBreading();
-            System.out.println(worldMap.avgChildren() + ":Avg Children");
-            worldMap.dayGrassGenerator();
+            assistant.dayMovesAnimal();
+            assistant.dayEating();
+            System.out.println(assistant.avgEnergy() + ":Avg Energy");
+            assistant.dayBreading();
+            System.out.println(assistant.avgChildren() + ":Avg Children");
+            assistant.dayGrassGenerator();
             System.out.println(worldMap.numberOfEmptySpaces() + ":EmptySpaces");
             worldMap.addDay();
             System.out.println(worldMap.getDay() + ":Day");
