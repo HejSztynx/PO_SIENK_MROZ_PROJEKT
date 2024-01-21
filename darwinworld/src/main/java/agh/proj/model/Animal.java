@@ -5,7 +5,6 @@ import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.variants.MutationVariant;
 
 public class Animal implements WorldElement {
-    private final int hisNumber;
     private final int dateOfBirth;
     private final Genotype genotype;
     private Vector2d position;
@@ -19,9 +18,8 @@ public class Animal implements WorldElement {
     private Animal animalParent2=null;
     private int numberOfDescendats=0;
 
-    public Animal(Vector2d position, Genotype genotype, int energy, int dateOfBirth, int hisNumber) {
+    public Animal(Vector2d position, Genotype genotype, int energy, int dateOfBirth) {
         this.position = position;
-        this.hisNumber = hisNumber;
         this.dateOfBirth = dateOfBirth;
         this.energy = energy;
         this.genotype = genotype;
@@ -29,8 +27,8 @@ public class Animal implements WorldElement {
         currentOrientationIndex = -1;
     }
 
-    public Animal(Vector2d position, int energy, int genoTypeLength, int hisNumber) {
-        this(position, Genotype.randomGenotype(genoTypeLength), energy, 0, hisNumber);
+    public Animal(Vector2d position, int energy, int genoTypeLength) {
+        this(position, Genotype.randomGenotype(genoTypeLength), energy, 0);
     }
     public void setParents(Animal animalParent1,Animal animalParent2)
     {
@@ -48,16 +46,12 @@ public class Animal implements WorldElement {
         if(animalParent2!=null)
             animalParent2.getsDescendant();
     }
-    public static Animal breed(Animal animal1, Animal animal2, int breedEnergy, MutationVariant mutationVariant, int minMutation, int maxMutation, int hisNumber) {
+    public static Animal breed(Animal animal1, Animal animal2, int breedEnergy, MutationVariant mutationVariant, int minMutation, int maxMutation) {
         animal1.getsChild();
         animal1.energy -= breedEnergy;
         animal2.getsChild();
         animal2.energy -= breedEnergy;
-        return new Animal(animal1.getPosition(), Genotype.cross(animal1, animal2, mutationVariant, minMutation, maxMutation), breedEnergy * 2, animal1.dateOfBirth + animal1.age, hisNumber);
-    }
-
-    public int getHisNumber() {
-        return hisNumber;
+        return new Animal(animal1.getPosition(), Genotype.cross(animal1, animal2, mutationVariant, minMutation, maxMutation), breedEnergy * 2, animal1.dateOfBirth + animal1.age);
     }
 
     public Vector2d getPosition() {
