@@ -86,7 +86,6 @@ public class GlobeAssistant {
                     if (animal1.canBreed(globe.getParameters().getBreedNeededEnergy()) && animal2.canBreed(globe.getParameters().getBreedNeededEnergy())) {
                         globe.increseNumberOfAnimals();
                         Animal newAnimal = Animal.breed(animal1, animal2, globe.getParameters().getBreedLostEnergy(), globe.getParameters().getMutationVariant(), globe.getParameters().getMinMutations(), globe.getParameters().getMaxMutations(),globe.getNumberOfAllAnimals());
-                        globe.increseNumberOfAnimals();
                         globe.place(newAnimal, newAnimal.getPosition());
                         if(globe.getMostPopular().get(newAnimal.getGenotype())==null)
                             globe.getMostPopular().put(newAnimal.getGenotype(),0);

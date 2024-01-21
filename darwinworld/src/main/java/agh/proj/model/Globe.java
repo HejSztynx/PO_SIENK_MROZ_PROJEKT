@@ -12,9 +12,9 @@ import static java.lang.Math.sqrt;
 public class Globe implements WorldMap, BoundsValidator {
     private int animalCount = 0;
     private final Vector2d upperRight;
-    private static int numberOfAllAnimals=0;
-    private static int deadAnimals = 0;
-    private static int sumOfAge=0;
+    private  int numberOfAllAnimals=0;
+    private int deadAnimals = 0;
+    private  int sumOfAge=0;
     private final Map<String, Biome> biomes = new HashMap<>();
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final Parameters parameters;
@@ -206,7 +206,6 @@ public class Globe implements WorldMap, BoundsValidator {
         for (int i = 0; i < parameters.getInitialAnimalsNumber(); i++) {
             Vector2d position = new Vector2d(random.nextInt(upperRight.getX()), random.nextInt(upperRight.getY()));
             Animal animal = new Animal(position, parameters.getInitialEnergy(), parameters.getGenotypeLength(),numberOfAllAnimals++);
-            increseNumberOfAnimals();
             animals.get(position).add(animal);
             if(mostPopular.get(animal.getGenotype())==null)
                 mostPopular.put(animal.getGenotype(),0);
