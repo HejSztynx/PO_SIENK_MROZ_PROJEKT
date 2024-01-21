@@ -57,7 +57,7 @@
             <VBox alignment="CENTER" spacing="20" maxWidth="100">
                 <VBox>
                     <Label style="-fx-font-weight: bold" text="Tracked:"/>
-                    <Label fx:id="tracked" style="-fx-font-weight: bold" text="None"/>
+                    <Label fx:id="tracked" style="-fx-font-weight: bold; -fx-font-size: 20" text="None"/>
                 </VBox>
                 <VBox>
                     <Label style="-fx-font-weight: bold">Position</Label>
@@ -80,11 +80,11 @@
                     <TextField fx:id="energyTrack" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold">Number of children</Label>
+                    <Label style="-fx-font-weight: bold" text="Number of&#10;children"/>
                     <TextField fx:id="childrenTrack" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold">Number of descendants</Label>
+                    <Label style="-fx-font-weight: bold" text="Number of&#10;descendants"/>
                     <TextField fx:id="descendantsTrack" editable="false"/>
                 </VBox>
                 <VBox>

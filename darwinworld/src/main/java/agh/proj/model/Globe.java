@@ -36,7 +36,6 @@ public class Globe implements WorldMap, BoundsValidator {
         initialGrassGenerator();
         initialAnimalMap();
         initialAnimalsGenerator();
-
     }
 
     public int getAnimalCount() {
@@ -52,6 +51,13 @@ public class Globe implements WorldMap, BoundsValidator {
             for (Animal animal : animalList) {
                 if (animal.getHisNumber() == n) return animal;
             }
+        }
+        return null;
+    }
+
+    public Animal getDeadAnimal(int n) {
+        for (Animal animal : deadAnimals) {
+            if (animal.getHisNumber() == n) return animal;
         }
         return null;
     }

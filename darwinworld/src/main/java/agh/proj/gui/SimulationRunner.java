@@ -105,7 +105,6 @@ public class SimulationRunner implements MapChangeListener {
             initializeMapStats();
 
             int animalCount = worldMap.getAnimalCount();
-            System.out.println(animalCount);
 
             list.getChildren().clear();
             for (int i = 1; i <= animalCount; i++) {
@@ -131,16 +130,21 @@ public class SimulationRunner implements MapChangeListener {
         if (selectedItem == null) return;
 
         tracked.setText(selectedItem);
+        tracked.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         String number = selectedItem.split(" ")[1];
         toTrack = Integer.parseInt(number);
+        initializeAnimalList();
+        updateTracking();
     }
 
     private void updateTracking() {
         if (toTrack == 0) return;
         Animal animal = worldMap.getAnimal(toTrack - 1);
         if (animal == null) {
-            trackedDead();
-            return;
+            animal = worldMap.getDeadAnimal(toTrack - 1);
+            if (animal == null) {
+                return;
+            }
         }
         positionTrack.setText(String.valueOf(animal.getPosition()));
         ageTrack.setText(String.valueOf(animal.getAge()));
@@ -153,13 +157,6 @@ public class SimulationRunner implements MapChangeListener {
             deathTrack.setText("DEAD");
         else
             deathTrack.setText("ALIVE");
-    }
-
-    private void trackedDead() {
-        positionTrack.setText("naprawie to");
-        ageTrack.setText("DEAD");
-        genomeTrack.setText("DEAD");
-        energyTrack.setText("DEAD");
     }
 
     public void setParameters(Parameters parameters) {
@@ -175,7 +172,7 @@ public class SimulationRunner implements MapChangeListener {
         }
         else if (value.equals("RESUME")) {
             se.pauseResumeThreads(false);
-            pauseResumeButton.setText("STOP");
+            pauseResumeButton.setText("PAUSE");
         }
     }
     @Override

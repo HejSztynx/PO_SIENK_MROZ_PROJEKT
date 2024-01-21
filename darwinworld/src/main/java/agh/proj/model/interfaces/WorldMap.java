@@ -23,6 +23,8 @@ public interface WorldMap extends MoveValidator {
 
     Animal getAnimal(int n);
 
+    Animal getDeadAnimal(int n);
+
     int getAnimalCount();
 
     int avgEnergy();
