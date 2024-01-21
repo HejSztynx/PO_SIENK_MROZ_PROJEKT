@@ -58,7 +58,7 @@ public class Simulation implements Runnable {
             System.out.println(worldMap.numberOfEmptySpaces() + ":EmptySpaces");
             worldMap.addDay();
             System.out.println(worldMap.getDay() + ":Day");
-            System.out.println(worldMap.mostPopularGenom() + ":Genom");
+            System.out.println(worldMap.mostPopularGenome() + ":Genom");
             System.out.println(mapVisualizer.draw());
             callSubscribers();
         }

@@ -10,6 +10,7 @@ import java.util.*;
 import static java.lang.Math.sqrt;
 
 public class Globe implements WorldMap, BoundsValidator {
+    private int animalCount = 0;
     private final Vector2d upperRight;
     private static int numberOfAllAnimals=0;
     private static int deadAnimals = 0;
@@ -30,22 +31,42 @@ public class Globe implements WorldMap, BoundsValidator {
     private Map<Genotype, Integer> mostPopular = new HashMap<>();
     private Set<Vector2d> emptySpacesJungle = new HashSet<>();
     private Set<Vector2d> emptySpacesPlains = new HashSet<>();
+
     public Globe(int width, int height, Parameters parameters) {
         upperRight = new Vector2d(width - 1, height - 1);
         this.parameters = parameters;
         generateJungle();
         if (parameters.getFoliageVariant() == FoliageVariant.POISONOUS_PLANTS)
             generateSwamp();
-        emptySpacesInitialazie();
+        emptySpacesInitialize();
         initialGrassGenerator();
         initialAnimalMap();
         initialAnimalsGenerator();
 
     }
+
+    public int getAnimalCount() {
+        return animalCount;
+    }
+
+    public int getGrassCount() {
+        return grasses.size();
+    }
+
+    public Animal getAnimal(int n) {
+        for (List<Animal> animalList : animals.values()) {
+            for (Animal animal : animalList) {
+                if (animal.getHisNumber() == n) return animal;
+            }
+        }
+        return null;
+    }
+
     public void increseNumberOfAnimals(){
         numberOfAllAnimals++;
     }
-    private void emptySpacesInitialazie() {
+  
+    private void emptySpacesInitialize() {
         for (int i = 0; i < upperRight.getY() + 1; i++) {
             for (int j = 0; j < upperRight.getX() + 1; j++) {
                 Vector2d position = new Vector2d(j, i);
@@ -66,6 +87,7 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int avgAgeForDead() {
+        if (sumOfAge == 0) return -1;
         return sumOfAge/deadAnimals;
     }
     public  Map<Vector2d, List<Animal>> getAnimals(){
@@ -74,7 +96,24 @@ public class Globe implements WorldMap, BoundsValidator {
     public int getDay(){
         return day;
     }
-    public Genotype mostPopularGenom() {
+
+    public int avgChildren() {
+        if(allDead()==0)
+            return 0;
+        int n = 0;
+        int wyn = 0;
+        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
+            Vector2d key = entry.getKey();
+            List<Animal> values = entry.getValue();
+            for (int i = 0; i < values.size(); i++) {
+                n++;
+                wyn += values.get(i).getChildrenNo();
+            }
+        }
+        return wyn / n;
+    }
+
+    public Genotype mostPopularGenome() {
         Genotype wyn = null;
         int animals_with_it = 0;
         for (Map.Entry<Genotype, Integer> entry : mostPopular.entrySet()) {
