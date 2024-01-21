@@ -309,4 +309,21 @@ public class Globe implements WorldMap, BoundsValidator {
             animals.get(position).add((Animal) animal);
         } else System.out.println("CANNOT PLACE AT " + position);
     }
+    @Override
+    public int avgEnergy() {//To do odchudzenia
+        if(allDead()==0)
+            return 0;
+        int n = 0;
+        int wyn = 0;
+        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
+            Vector2d key = entry.getKey();
+            List<Animal> values = entry.getValue();
+            for (int i = 0; i < values.size(); i++) {
+                n++;
+                wyn += values.get(i).getEnergy();
+            }
+
+        }
+        return wyn / n;
+    }
 }
