@@ -58,7 +58,7 @@ public class GlobeAssistant {
                 }
             }
             if (position != null) {
-                Grass grass = null;
+                Grass grass = new Grass(0,new Vector2d(0,0));
                 boolean swampChcker = false;
                 if (globe.getBiomes().containsKey("Swamp"))
                     if (globe.getBiomes().get("Swamp").boundsValidator(position))
@@ -84,7 +84,8 @@ public class GlobeAssistant {
                     Animal animal1 = values.get(0);
                     Animal animal2 = values.get(1);
                     if (animal1.canBreed(globe.getParameters().getBreedNeededEnergy()) && animal2.canBreed(globe.getParameters().getBreedNeededEnergy())) {
-                        Animal newAnimal = Animal.breed(animal1, animal2, globe.getParameters().getBreedLostEnergy(), globe.getParameters().getMutationVariant(), globe.getParameters().getMinMutations(), globe.getParameters().getMaxMutations());
+                        globe.increseNumberOfAnimals();
+                        Animal newAnimal = Animal.breed(animal1, animal2, globe.getParameters().getBreedLostEnergy(), globe.getParameters().getMutationVariant(), globe.getParameters().getMinMutations(), globe.getParameters().getMaxMutations(),globe.getNumberOfAllAnimals());
                         globe.increseNumberOfAnimals();
                         globe.place(newAnimal, newAnimal.getPosition());
                         if(globe.getMostPopular().get(newAnimal.getGenotype())==null)

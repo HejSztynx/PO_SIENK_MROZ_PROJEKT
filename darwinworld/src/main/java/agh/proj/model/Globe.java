@@ -113,7 +113,9 @@ public class Globe implements WorldMap, BoundsValidator {
         Biome jungle = new Biome(new Vector2d(startWidth, startHeight), new Vector2d(startWidth + swampWidth, startHeight + swampHeight));
         biomes.put("Swamp", jungle);
     }
-
+    public int getNumberOfAllAnimals(){
+        return numberOfAllAnimals;
+    }
     public String biomeColor(int x, int y) {
         String color;
         Vector2d position = new Vector2d(x, y);
@@ -164,7 +166,7 @@ public class Globe implements WorldMap, BoundsValidator {
         Random random = new Random();
         for (int i = 0; i < parameters.getInitialAnimalsNumber(); i++) {
             Vector2d position = new Vector2d(random.nextInt(upperRight.getX()), random.nextInt(upperRight.getY()));
-            Animal animal = new Animal(position, parameters.getInitialEnergy(), parameters.getGenotypeLength());
+            Animal animal = new Animal(position, parameters.getInitialEnergy(), parameters.getGenotypeLength(),numberOfAllAnimals++);
             increseNumberOfAnimals();
             animals.get(position).add(animal);
             if(mostPopular.get(animal.getGenotype())==null)
