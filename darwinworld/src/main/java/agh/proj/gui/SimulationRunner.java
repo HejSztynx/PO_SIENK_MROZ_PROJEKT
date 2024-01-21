@@ -1,5 +1,6 @@
 package agh.proj.gui;
 
+import agh.proj.model.Animal;
 import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
 import agh.proj.model.Vector2d;
@@ -11,8 +12,8 @@ import agh.proj.simulation.SimulationEngine;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -29,6 +30,43 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private Button pauseResumeButton;
     private SimulationEngine se = null;
+
+    @FXML
+    private TextField animalNumber;
+    @FXML
+    private TextField grassNumber;
+    @FXML
+    private TextField freeSpaces;
+    @FXML
+    private TextField popularGenotype;
+    @FXML
+    private TextField averageEnergy;
+    @FXML
+    private TextField averageLifeSpan;
+    @FXML
+    private TextField averageChildren;
+
+    @FXML
+    private VBox list;
+    private int toTrack = 0;
+    @FXML
+    private Label tracked;
+    @FXML
+    private TextField positionTrack;
+    @FXML
+    private TextField ageTrack;
+    @FXML
+    private TextField genomeTrack;
+    @FXML
+    private TextField energyTrack;
+    @FXML
+    private TextField eatenGrassTrack;
+    @FXML
+    private TextField childrenTrack;
+    @FXML
+    private TextField descendantsTrack;
+    @FXML
+    private TextField deathTrack;
 
     public void initialize() {
         if (parameters == null) {
@@ -51,6 +89,79 @@ public class SimulationRunner implements MapChangeListener {
         }
     }
 
+    private void initializeMapStats() {
+        animalNumber.setText(String.valueOf(worldMap.getAnimalCount()));
+        grassNumber.setText(String.valueOf(worldMap.getGrassCount()));
+        freeSpaces.setText(String.valueOf(worldMap.numberOfEmptySpaces()));
+        popularGenotype.setText(worldMap.mostPopularGenome().toString());
+        averageEnergy.setText(String.valueOf(worldMap.avgEnergy()));
+        if (worldMap.avgAgeForDead() != -1)
+            averageLifeSpan.setText(String.valueOf(worldMap.avgAgeForDead()));
+        averageChildren.setText(String.valueOf(worldMap.avgChildren()));
+    }
+
+    private void initializeAnimalList() {
+        Platform.runLater(() -> {
+            initializeMapStats();
+
+            int animalCount = worldMap.getAnimalCount();
+            System.out.println(animalCount);
+
+            list.getChildren().clear();
+            for (int i = 1; i <= animalCount; i++) {
+                Label animalLabel = new Label("Animal " + i);
+                if (worldMap.getAnimal(i - 1) == null) {
+                    animalLabel.setTextFill(Color.RED);
+                }
+                if (i == toTrack) {
+                    animalLabel.setStyle("-fx-font-weight: bold");
+                }
+                animalLabel.setPadding(new Insets(10));
+                animalLabel.setBorder(new Border(new javafx.scene.layout.BorderStroke(Color.BLACK,
+                        javafx.scene.layout.BorderStrokeStyle.SOLID, null, new javafx.scene.layout.BorderWidths(1))));
+
+                list.getChildren().add(animalLabel);
+                animalLabel.setOnMouseClicked(event -> handleAnimalLabelClick(animalLabel));
+            }
+        });
+    }
+
+    private void handleAnimalLabelClick(Label label) {
+        String selectedItem = label.getText();
+        if (selectedItem == null) return;
+
+        tracked.setText(selectedItem);
+        String number = selectedItem.split(" ")[1];
+        toTrack = Integer.parseInt(number);
+    }
+
+    private void updateTracking() {
+        if (toTrack == 0) return;
+        Animal animal = worldMap.getAnimal(toTrack - 1);
+        if (animal == null) {
+            trackedDead();
+            return;
+        }
+        positionTrack.setText(String.valueOf(animal.getPosition()));
+        ageTrack.setText(String.valueOf(animal.getAge()));
+        genomeTrack.setText(String.valueOf(animal.getGenotype()));
+        energyTrack.setText(String.valueOf(animal.getEnergy()));
+        eatenGrassTrack.setText(String.valueOf(animal.getNumberOfEatedGrass()));
+        childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
+        descendantsTrack.setText(String.valueOf(animal.getNumberOfDescendats()));
+        if (animal.getEnergy() == 0)
+            deathTrack.setText("DEAD");
+        else
+            deathTrack.setText("ALIVE");
+    }
+
+    private void trackedDead() {
+        positionTrack.setText("naprawie to");
+        ageTrack.setText("DEAD");
+        genomeTrack.setText("DEAD");
+        energyTrack.setText("DEAD");
+    }
+
     public void setParameters(Parameters parameters) {
         this.parameters = parameters;
         initialize();
@@ -70,6 +181,8 @@ public class SimulationRunner implements MapChangeListener {
     @Override
     public void mapChanged() {
         Platform.runLater(this::drawMap);
+        initializeAnimalList();
+        updateTracking();
     }
 
     private void drawGrid() {
@@ -104,7 +217,6 @@ public class SimulationRunner implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(new Vector2d(i - 1, j - 1));
 
                 StackPane tile = new StackPane();
-//                    tile.setStyle("-fx-background-color: lightgreen");
                 tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
 
 
@@ -128,7 +240,7 @@ public class SimulationRunner implements MapChangeListener {
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0));
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
