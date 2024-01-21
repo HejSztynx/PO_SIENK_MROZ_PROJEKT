@@ -48,6 +48,11 @@ public class Animal implements WorldElement {
         if(animalParent2!=null)
             animalParent2.getsDescendant();
     }
+
+    public int getCurrentOrientationIndex() {
+        return currentOrientationIndex;
+    }
+
     public static Animal breed(Animal animal1, Animal animal2, int breedEnergy, MutationVariant mutationVariant, int minMutation, int maxMutation, int hisNumber) {
         animal1.getsChild();
         animal1.energy -= breedEnergy;
@@ -103,7 +108,6 @@ public class Animal implements WorldElement {
 
         age++;
         energy--;
-        //System.out.println(this);
     }
 
     public int getNumberOfEatedGrass() {

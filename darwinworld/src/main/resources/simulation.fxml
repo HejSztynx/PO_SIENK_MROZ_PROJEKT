@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             minHeight="700.0" minWidth="500.0"
@@ -16,7 +18,7 @@
 
     <center>
         <HBox spacing="20" alignment="CENTER">
-            <VBox alignment="CENTER" spacing="20">
+            <VBox alignment="CENTER" spacing="20" maxWidth="100">
                 <VBox>
                     <Label style="-fx-font-weight: bold" text="Number of animals"/>
                     <TextField fx:id="animalNumber" editable="false"/>
@@ -73,7 +75,10 @@
                 </VBox>
                 <VBox>
                     <Label style="-fx-font-weight: bold">Genome</Label>
-                    <TextField fx:id="genomeTrack" editable="false"/>
+                    <HBox fx:id="hBox">
+
+                    </HBox>
+                    <TextFlow fx:id="genomeTrack"/>
                 </VBox>
                 <VBox>
                     <Label style="-fx-font-weight: bold">Energy</Label>

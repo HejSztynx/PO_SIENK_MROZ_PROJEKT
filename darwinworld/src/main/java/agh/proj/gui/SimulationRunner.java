@@ -14,9 +14,12 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,7 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private TextField ageTrack;
     @FXML
-    private TextField genomeTrack;
+    private TextFlow genomeTrack;
     @FXML
     private TextField energyTrack;
     @FXML
@@ -67,6 +70,9 @@ public class SimulationRunner implements MapChangeListener {
     private TextField descendantsTrack;
     @FXML
     private TextField deathTrack;
+
+    @FXML
+    private HBox hBox;
 
     public void initialize() {
         if (parameters == null) {
@@ -148,7 +154,25 @@ public class SimulationRunner implements MapChangeListener {
         }
         positionTrack.setText(String.valueOf(animal.getPosition()));
         ageTrack.setText(String.valueOf(animal.getAge()));
-        genomeTrack.setText(String.valueOf(animal.getGenotype()));
+
+        genomeTrack.getChildren().clear();
+        String genome = String.valueOf(animal.getGenotype());
+        int currentGen = animal.getCurrentOrientationIndex();
+        int toColor = 3 * currentGen + 1;
+        int i = 0;
+
+        for (char c : genome.toCharArray()) {
+            Text letter = new Text(String.valueOf(c));
+            letter.setStyle("-fx-font-weight: bold");
+            if (i == toColor) {
+                letter.setFill(Color.GREEN);
+            }
+            TextFlow textFlow = new TextFlow(letter);
+
+            genomeTrack.getChildren().add(textFlow);
+            i++;
+        }
+
         energyTrack.setText(String.valueOf(animal.getEnergy()));
         eatenGrassTrack.setText(String.valueOf(animal.getNumberOfEatedGrass()));
         childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
@@ -179,7 +203,7 @@ public class SimulationRunner implements MapChangeListener {
     public void mapChanged() {
         Platform.runLater(this::drawMap);
         initializeAnimalList();
-        updateTracking();
+        Platform.runLater(this::updateTracking);
     }
 
     private void drawGrid() {
@@ -214,8 +238,12 @@ public class SimulationRunner implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(new Vector2d(i - 1, j - 1));
 
                 StackPane tile = new StackPane();
-                tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
+//                tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
 
+                ImageView backgroundImageView = new ImageView(new Image("dirt.PNG"));
+                backgroundImageView.setFitWidth(cellDim - 1);
+                backgroundImageView.setFitHeight(cellDim - 1);
+                tile.getChildren().add(backgroundImageView);
 
                 Border border = new Border(new BorderStroke(Color.BLACK,
                         BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
@@ -224,6 +252,7 @@ public class SimulationRunner implements MapChangeListener {
 
                 if (worldElement != null) {
                     Text text = new Text(worldElement.toString());
+                    text.setFill(Color.WHITE);
                     tile.getChildren().addAll(text);
                 }
                 mapGrid.add(tile, i, yDim - j);
