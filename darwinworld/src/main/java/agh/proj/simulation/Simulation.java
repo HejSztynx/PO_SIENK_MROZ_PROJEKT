@@ -2,19 +2,23 @@ package agh.proj.simulation;
 
 import agh.proj.model.Globe;
 import agh.proj.model.interfaces.MapChangeListener;
+import agh.proj.model.util.CSVSimulationSaver;
 import agh.proj.model.util.MapVisualizer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Simulation implements Runnable {
     private Globe worldMap;
     private MapVisualizer mapVisualizer;
+    private CSVSimulationSaver csvSaver;
     private final ArrayList<MapChangeListener> subscribers = new ArrayList<>();
     private boolean pause = false;
 
-    public Simulation(Globe worldMap) {
+    public Simulation(Globe worldMap) throws IOException {
         this.worldMap = worldMap;
         mapVisualizer = new MapVisualizer(worldMap);
+        csvSaver=new CSVSimulationSaver("Simulation");
     }
 
     public void setPause(boolean pause) {
@@ -30,11 +34,6 @@ public class Simulation implements Runnable {
         System.out.println(mapVisualizer.draw());
         callSubscribers();
         while (worldMap.allDead() != 0) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
 
             while (pause) {
                 try {
@@ -58,6 +57,17 @@ public class Simulation implements Runnable {
             System.out.println(worldMap.mostPopularGenome() + ":Genom");
             System.out.println(mapVisualizer.draw());
             callSubscribers();
+            try {
+                csvSaver.updateCSV(worldMap.getDay(), worldMap.getRecords());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         }
         System.out.println("Sim End");
     }

@@ -40,7 +40,7 @@ public class Globe implements WorldMap, BoundsValidator {
         initialAnimalMap();
         initialAnimalsGenerator();
     }
-
+    public ArrayList<Animal> getRecords(){return (ArrayList<Animal>) records;}
     public List<Animal> getAnimalsAtPosition(Vector2d position) {
         return animals.get(position);
     }
