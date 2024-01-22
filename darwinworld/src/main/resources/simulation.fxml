@@ -50,7 +50,7 @@
                 </VBox>
             </VBox>
             <VBox alignment="CENTER" spacing="20">
-                <ScrollPane minWidth="100">
+                <ScrollPane minWidth="100" maxHeight="400">
                     <VBox fx:id="list" alignment="CENTER" maxWidth="100">
 
                     </VBox>

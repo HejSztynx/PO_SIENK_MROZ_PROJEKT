@@ -12,7 +12,7 @@
 <?import java.lang.String?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
-            minHeight="700.0" minWidth="500.0"
+            minHeight="750.0" minWidth="500.0"
             fx:controller="agh.proj.gui.SimulationPresenter">
 
 
@@ -153,7 +153,7 @@
                     </VBox>
                 </HBox>
             </VBox>
-            <VBox alignment="CENTER" spacing="10">
+            <VBox alignment="CENTER" spacing="10" maxWidth="300">
                 <Label>Name of CSV file</Label>
                 <TextField fx:id="csvName"/>
             </VBox >
@@ -166,7 +166,6 @@
                     </HBox>
                     <Button onAction="#onSimulationStartClicked">RUN</Button>
                 </VBox>
-
             </VBox>
         </VBox>
     </center>
