@@ -7,6 +7,8 @@ public interface WorldElement {
 
     String getImage();
 
+    String getEnergyImage(int neededBreedEnergy);
+
     boolean isTracked(int n);
 
     int getRotation();
