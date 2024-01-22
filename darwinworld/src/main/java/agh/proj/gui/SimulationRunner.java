@@ -184,7 +184,9 @@ public class SimulationRunner implements MapChangeListener {
         childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
         descendantsTrack.setText(String.valueOf(animal.getNumberOfDescendats()));
         if (animal.getEnergy() == 0)
+
             deathTrack.setText("DIED:"+animal.getDateOfDeath());
+
         else
             deathTrack.setText("ALIVE");
     }
