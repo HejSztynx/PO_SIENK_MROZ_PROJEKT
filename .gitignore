@@ -12,6 +12,8 @@ darwinworld/gradlew
 darwinworld/gradlew.bat
 darwinworld/presets/
 presets
+*.csv
+darwinworld/*.csv
 
 # User-specific stuff
 .idea/**/workspace.xml

@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -265,13 +266,13 @@ public class SimulationRunner implements MapChangeListener {
 
                     }
 
-//                    boolean aLot = false;
+                    boolean aLot = false;
                     if (numberOfAnimals > 1) {
                         toRotate = 0;
                         elementUrl = elementUrl.substring(0, elementUrl.length() - 4);
-                        if (numberOfAnimals > 4) {
-//                            aLot = true;
-                            elementUrl = elementUrl + 5 + ".png";
+                        if (numberOfAnimals > 5) {
+                            aLot = true;
+                            elementUrl = elementUrl + ".png";
                         }
                         else {
                             elementUrl = elementUrl + numberOfAnimals + ".png";
@@ -281,21 +282,23 @@ public class SimulationRunner implements MapChangeListener {
                     ImageView overlayImageView = new ImageView(new Image(elementUrl));
                     overlayImageView.setFitWidth(cellDim - 1);
                     overlayImageView.setFitHeight(cellDim - 1);
-                    Rotate rotate = new Rotate(toRotate, (double) (cellDim - 1) / 2, (double) (cellDim - 1) / 2);
-                    overlayImageView.getTransforms().add(rotate);
+                    Rotate rotate;
+                    if (aLot) {
+                        rotate = new Rotate(180, (double) (cellDim - 1) / 2, (double) (cellDim - 1) / 2);
+                        overlayImageView.getTransforms().add(rotate);
+                        Label number = new Label();
+                        number.setText(String.valueOf(numberOfAnimals));
+                        number.setStyle("-fx-font-weight: bold; -fx-font-size: 40");
+                        number.setTextFill(Color.TURQUOISE);
 
-//                    if (aLot) {
-//                        overlayImageView.setFitWidth(cellDim / 1.5);
-//                        overlayImageView.setFitHeight(cellDim / 1.5);
-//                        tile.getChildren().add(overlayImageView);
-//                        tile.getChildren().add(new Text(String.valueOf(numberOfAnimals)));
-//                    }
-//                    else {
-//                        tile.getChildren().add(overlayImageView);
-//                    }
+                        tile.getChildren().addAll(overlayImageView, number);
 
-                    tile.getChildren().add(overlayImageView);
-
+                    }
+                    else {
+                        rotate = new Rotate(toRotate, (double) (cellDim - 1) / 2, (double) (cellDim - 1) / 2);
+                        overlayImageView.getTransforms().add(rotate);
+                        tile.getChildren().add(overlayImageView);
+                    }
                 }
                 Border border = new Border(new BorderStroke(Color.BLACK,
                         BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
