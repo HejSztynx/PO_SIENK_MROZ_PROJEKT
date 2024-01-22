@@ -427,7 +427,7 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
 
-    //Ogólnie tej funcki nie potrzebujemy bo nic nie placujemy
+
     @Override
     public void place(Animal animal, Vector2d position) {
         if (boundsValidator(position)) {
