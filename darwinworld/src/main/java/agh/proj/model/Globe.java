@@ -3,7 +3,6 @@ package agh.proj.model;
 import agh.proj.model.interfaces.BoundsValidator;
 import agh.proj.model.interfaces.WorldElement;
 import agh.proj.model.interfaces.WorldMap;
-import agh.proj.model.util.AnimalComparator;
 import agh.proj.model.variants.FoliageVariant;
 
 import java.util.*;
@@ -12,12 +11,11 @@ import static java.lang.Math.sqrt;
 
 public class Globe implements WorldMap, BoundsValidator {
     private int animalCount = 0;
-    private final Vector2d lowerLeft = new Vector2d(0, 0);
     private final Vector2d upperRight;
-    private final List<Animal> records = new ArrayList<>();
-    private final List<Animal> deadAnimals = new ArrayList<>();
+    private  int numberOfAllAnimals=0;
+    private int deadAnimals = 0;
+    private  int sumOfAge=0;
     private final Map<String, Biome> biomes = new HashMap<>();
-    private final List<List<Integer>> descendantTree = new ArrayList<>();
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final Parameters parameters;
     private int day = 0;
@@ -25,6 +23,14 @@ public class Globe implements WorldMap, BoundsValidator {
 
 
     private Map<Vector2d, List<Animal>> animals = new HashMap<>();
+    private ArrayList<Animal> records=new ArrayList<>();
+
+    public Map<Genotype, Integer> getMostPopular() {
+        return mostPopular;
+    }
+    public ArrayList<Animal> getRecords(){
+        return records;
+    }
     private Map<Genotype, Integer> mostPopular = new HashMap<>();
     private Set<Vector2d> emptySpacesJungle = new HashSet<>();
     private Set<Vector2d> emptySpacesPlains = new HashSet<>();
@@ -62,12 +68,14 @@ public class Globe implements WorldMap, BoundsValidator {
         return null;
     }
 
+
     public Animal getDeadAnimal(int n) {
         for (Animal animal : deadAnimals) {
             if (animal.getHisNumber() == n) return animal;
         }
         return null;
     }
+
 
     private void emptySpacesInitialize() {
         for (int i = 0; i < upperRight.getY() + 1; i++) {
@@ -82,7 +90,7 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int allDead() {
-        return records.size() - deadAnimals.size();
+        return numberOfAllAnimals-deadAnimals;
     }
     public ArrayList<Animal> getRecords(){return (ArrayList<Animal>) records;}
     public void addDay() {
@@ -90,37 +98,16 @@ public class Globe implements WorldMap, BoundsValidator {
     }
 
     public int avgAgeForDead() {
-        int n = 0;
-        int wyn = 0;
-        for (Animal animal : deadAnimals) {
-            n++;
-            wyn += animal.getAge();
-        }
-        if (n == 0) return -1;
-        return wyn / n;
+        if (sumOfAge == 0) return -1;
+        return sumOfAge/deadAnimals;
     }
-
-
-    public int avgEnergy() {
-        if(allDead()==0)
-            return 0;
-        int n = 0;
-        int wyn = 0;
-        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
-            Vector2d key = entry.getKey();
-            List<Animal> values = entry.getValue();
-            for (int i = 0; i < values.size(); i++) {
-                n++;
-                wyn += values.get(i).getEnergy();
-            }
-
-        }
-        return wyn / n;
+    public  Map<Vector2d, List<Animal>> getAnimals(){
+        return animals;
     }
-
     public int getDay(){
         return day;
     }
+
     public int avgChildren() {
         if(allDead()==0)
             return 0;
@@ -151,6 +138,7 @@ public class Globe implements WorldMap, BoundsValidator {
         for (int i = 0; i < upperRight.getY() + 1; i++) {
             for (int j = 0; j < upperRight.getX() + 1; j++) {
                 animals.put(new Vector2d(j, i), new ArrayList<Animal>());
+
             }
         }
     }
@@ -181,6 +169,7 @@ public class Globe implements WorldMap, BoundsValidator {
         return animals.get(position).size();
     }
 
+
     public String biomeColor(int x, int y) {
         String color;
         Vector2d position = new Vector2d(x, y);
@@ -191,7 +180,7 @@ public class Globe implements WorldMap, BoundsValidator {
             }
         }
         else if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
-            color = "lightpurple";
+            color = "BLUEVIOLET";
         }
         else color = "lightyellow";
         return color;
@@ -228,137 +217,45 @@ public class Globe implements WorldMap, BoundsValidator {
         }
     }
 
-    public void dayGrassGenerator() {
-        GrassGenerator generator = new GrassGenerator();
-        Random random = new Random();
-        int grassCount = 0;
-        for (int i = 0; i < parameters.getPlantsGrowingADay();) {
-            Vector2d position = null;
-            if (random.nextInt(100) < 80) {
-                if(!emptySpacesJungle.isEmpty()) {
-                    position = (Vector2d) emptySpacesJungle.toArray()[random.nextInt(emptySpacesJungle.size())];
-                    emptySpacesJungle.remove(position);
-                }
-            }
-            else {
-                if(!emptySpacesPlains.isEmpty())
-                {
-                    position= (Vector2d) emptySpacesPlains.toArray()[random.nextInt(emptySpacesPlains.size())];
-                    emptySpacesPlains.remove(position);
-                }
-            }
-            if(position!=null)
-            {
-                Grass grass=null;
-                boolean swampChcker=false;
-                if(biomes.containsKey("Swamp"))
-                    if(biomes.get("Swamp").boundsValidator(position))
-                        swampChcker=true;
-                if(swampChcker)
-                {
-                    grass=new GrassGenerator().generateGrass(50, parameters.getConsumedPlantEnergy(), position);
-                }
-                else
-                {
-                    grass=new GrassGenerator().generateGrass(0, parameters.getConsumedPlantEnergy(), position);
-                }
-                grasses.put(position,grass);
-                i++;
-            }
-            if(numberOfEmptySpaces()==0)
-                return;
-        }
+    public Parameters getParameters(){
+        return parameters;
     }
-
+    public Set<Vector2d> getEmptySpacesJungle(){
+        return emptySpacesJungle;
+    }
+    public Set<Vector2d> getEmptySpacesPlains(){
+        return emptySpacesPlains;
+    }
+    public Map<Vector2d, Grass> getGrasses(){
+        return grasses;
+    }
+    public Map<String,Biome> getBiomes(){
+        return biomes;
+    }
     private void initialAnimalsGenerator() {
         Random random = new Random();
         for (int i = 0; i < parameters.getInitialAnimalsNumber(); i++) {
             Vector2d position = new Vector2d(random.nextInt(upperRight.getX()), random.nextInt(upperRight.getY()));
-            Animal animal = new Animal(position, parameters.getInitialEnergy(), parameters.getGenotypeLength(), animalCount++);
-            records.add(animal);
-            descendantTree.add(new ArrayList<>());
+            Animal animal = new Animal(position, parameters.getInitialEnergy(), parameters.getGenotypeLength(),numberOfAllAnimals++);
             animals.get(position).add(animal);
             if(mostPopular.get(animal.getGenotype())==null)
                 mostPopular.put(animal.getGenotype(),0);
             mostPopular.put(animal.getGenotype(),mostPopular.get(animal.getGenotype())+1);
+            records.add(animal);
         }
     }
-
-    public void dayMovesAnimal() {
-        List<Animal> tmpListOfAll = new ArrayList<>();
-        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
-            Vector2d key = entry.getKey();
-            List<Animal> values = entry.getValue();
-            tmpListOfAll.addAll(values);
-
-        }
-        for (int i = 0; i < tmpListOfAll.size(); i++) {
-            move(tmpListOfAll.get(i));
-        }
+    public void increseSumOfAge(int age){
+        sumOfAge+=age;
+    }
+    public void increseDead(){
+        deadAnimals++;
     }
 
-    public void dayEating() {
-        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
-            Vector2d key = entry.getKey();
-            List<Animal> values = entry.getValue();
-            if (grasses.get(key) != null && values.size() > 0) {
-                Collections.sort(values, new AnimalComparator());
-                //System.out.println(values+"->"+grasses.get(key).getEnergy()+"->");
-                values.get(0).eat(grasses.get(key));
-                if(biomes.get("Jungle").boundsValidator(key))
-                    emptySpacesJungle.add(key);
-                else
-                    emptySpacesPlains.add(key);
-                grasses.remove(key);
-                //System.out.println(values);
-            }
-        }
-    }
 
-    public void dayCleaner() {
-        List<Animal> tmpList = new ArrayList<>();
-        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
-            Vector2d key = entry.getKey();
-            List<Animal> values = entry.getValue();
 
-            for (int i = 0; i < values.size(); i++) {
-                if (values.get(i).getEnergy() <= 0) {
-                    tmpList.add(values.get(i));
-                }
-            }
-        }
-        for (Animal animal : tmpList) {
-            animals.get(animal.getPosition()).remove(animal);
-            deadAnimals.add(animal);
-        }
-    }
 
-    public void dayBreading() {
-        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
-            Vector2d key = entry.getKey();
-            List<Animal> values = entry.getValue();
-            if (values.size() > 1) {
-                Collections.sort(values, new AnimalComparator());
-                Animal animal1 = values.get(0);
-                Animal animal2 = values.get(1);
-                if (animal1.canBreed(parameters.getBreedNeededEnergy()) && animal2.canBreed(parameters.getBreedNeededEnergy())) {
-                    Animal newAnimal = Animal.breed(animal1, animal2, parameters.getBreedLostEnergy(), parameters.getMutationVariant(), parameters.getMinMutations(), parameters.getMaxMutations(), animalCount++);
-                    records.add(newAnimal);
-                    place(newAnimal, newAnimal.getPosition());
-                    descendantTree.get(animal1.getHisNumber()).add(animalCount - 1);
-                    descendantTree.get(animal2.getHisNumber()).add(animalCount - 1);
-                    descendantTree.add(new ArrayList<>());
-                    if(mostPopular.get(newAnimal.getGenotype())==null)
-                        mostPopular.put(newAnimal.getGenotype(),0);
-                    mostPopular.put(newAnimal.getGenotype(),mostPopular.get(newAnimal.getGenotype())+1);
-                    animal1.getsDescendant();
-                    animal2.getsDescendant();
-                    newAnimal.setParents(animal1,animal2);
-                    //System.out.println(values+"->"+key);
-                }
-            }
-        }
-    }
+
+
 
     @Override
     public boolean boundsValidator(Vector2d position) {
@@ -418,20 +315,45 @@ public class Globe implements WorldMap, BoundsValidator {
     public boolean isOccupied(Vector2d position) {
         return objectAt(position) != null;
     }
-
+    private boolean focusCheck(Animal animal){
+        Random random=new Random();
+        if(grasses.get(animal.getPosition())!=null){
+            if(random.nextInt(100)<=20) {
+                if(grasses.get(animal.getPosition()).getEnergy()<0)
+                    return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void move(Animal animal) {
         animals.get(animal.getPosition()).remove(animal);
         animal.move(this);
+        if(focusCheck(animal))
+            animal.move(this);
         animals.get(animal.getPosition()).add(animal);
     }
-
-
-    //Ogólnie tej funcki nie potrzebujemy bo nic nie placujemy
     @Override
     public void place(Animal animal, Vector2d position) {
         if (boundsValidator(position)) {
             animals.get(position).add((Animal) animal);
         } else System.out.println("CANNOT PLACE AT " + position);
+    }
+    @Override
+    public int avgEnergy() {//To do odchudzenia
+        if(allDead()==0)
+            return 0;
+        int n = 0;
+        int wyn = 0;
+        for (Map.Entry<Vector2d, List<Animal>> entry : animals.entrySet()) {
+            Vector2d key = entry.getKey();
+            List<Animal> values = entry.getValue();
+            for (int i = 0; i < values.size(); i++) {
+                n++;
+                wyn += values.get(i).getEnergy();
+            }
+
+        }
+        return wyn / n;
     }
 }
