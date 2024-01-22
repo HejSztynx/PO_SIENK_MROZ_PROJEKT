@@ -31,6 +31,10 @@ public class Grass implements WorldElement {
         return "grass.png";
     }
 
+    public String getEnergyImage(int n) {
+        return "";
+    }
+
     public boolean isTracked(int n) {
         return false;
     }

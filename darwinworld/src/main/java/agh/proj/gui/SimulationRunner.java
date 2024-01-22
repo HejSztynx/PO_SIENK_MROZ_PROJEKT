@@ -261,20 +261,22 @@ public class SimulationRunner implements MapChangeListener {
                 tile.getChildren().add(backgroundImageView);
 
                 if (worldElement != null) {
+                    boolean isHP = false;
                     String elementUrl = worldElement.getImage();
                     int toRotate = worldElement.getRotation();
                     int numberOfAnimals = worldMap.numberOfAnimalsOnPosition(new Vector2d(i - 1, j - 1));
                     if (numberOfAnimals > 0) {
+                        isHP = true;
                         for (Animal animal : worldMap.getAnimalsAtPosition(new Vector2d(i - 1, j - 1))) {
                             if (animal.isTracked(toTrack - 1)) {
                                 elementUrl = "trackedcow.png";
                             }
                         }
-
                     }
 
                     boolean aLot = false;
                     if (numberOfAnimals > 1) {
+                        isHP = false;
                         toRotate = 0;
                         elementUrl = elementUrl.substring(0, elementUrl.length() - 4);
                         if (numberOfAnimals > 5) {
@@ -285,6 +287,10 @@ public class SimulationRunner implements MapChangeListener {
                             elementUrl = elementUrl + numberOfAnimals + ".png";
                         }
                     }
+
+//                    if (isHP) {
+//
+//                    }
 
                     ImageView overlayImageView = new ImageView(new Image(elementUrl));
                     overlayImageView.setFitWidth(cellDim - 1);
@@ -304,7 +310,15 @@ public class SimulationRunner implements MapChangeListener {
                     else {
                         rotate = new Rotate(toRotate, (double) (cellDim - 1) / 2, (double) (cellDim - 1) / 2);
                         overlayImageView.getTransforms().add(rotate);
-                        tile.getChildren().add(overlayImageView);
+                        tile.getChildren().addAll(overlayImageView);
+                        if (isHP) {
+                            ImageView overlayHP = new ImageView(new Image(worldElement.getEnergyImage(parameters.getBreedNeededEnergy())));
+                            overlayHP.setFitWidth((double) cellDim / 4);
+                            overlayHP.setFitHeight(cellDim - 1);
+                            tile.setAlignment(overlayHP, Pos.CENTER_LEFT);
+
+                            tile.getChildren().addAll(overlayHP);
+                        }
                     }
                 }
                 Border border = new Border(new BorderStroke(Color.BLACK,
