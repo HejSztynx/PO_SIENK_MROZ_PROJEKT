@@ -288,10 +288,6 @@ public class SimulationRunner implements MapChangeListener {
                         }
                     }
 
-//                    if (isHP) {
-//
-//                    }
-
                     ImageView overlayImageView = new ImageView(new Image(elementUrl));
                     overlayImageView.setFitWidth(cellDim - 1);
                     overlayImageView.setFitHeight(cellDim - 1);
@@ -314,7 +310,7 @@ public class SimulationRunner implements MapChangeListener {
                         if (isHP) {
                             ImageView overlayHP = new ImageView(new Image(worldElement.getEnergyImage(parameters.getBreedNeededEnergy())));
                             overlayHP.setFitWidth((double) cellDim / 4);
-                            overlayHP.setFitHeight(cellDim - 1);
+                            overlayHP.setFitHeight((double) cellDim / 1.2);
                             tile.setAlignment(overlayHP, Pos.CENTER_LEFT);
 
                             tile.getChildren().addAll(overlayHP);
