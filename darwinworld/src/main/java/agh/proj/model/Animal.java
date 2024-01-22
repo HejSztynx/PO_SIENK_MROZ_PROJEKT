@@ -134,4 +134,12 @@ public class Animal implements WorldElement {
     public boolean canBreed(int breedNeededEnergy) {
         return energy >= breedNeededEnergy;
     }
+
+    public boolean isTracked(int n) {
+        return n == hisNumber;
+    }
+
+    public int getRotation() {
+        return orientation.toNumber() * 45;
+    }
 }

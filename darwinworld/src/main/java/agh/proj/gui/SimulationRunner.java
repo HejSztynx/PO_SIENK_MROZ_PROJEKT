@@ -14,13 +14,18 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +147,7 @@ public class SimulationRunner implements MapChangeListener {
         toTrack = Integer.parseInt(number);
         initializeAnimalList();
         updateTracking();
+        Platform.runLater(this::drawMap);
     }
 
     private void updateTracking() {
@@ -247,18 +253,54 @@ public class SimulationRunner implements MapChangeListener {
 
                 tile.getChildren().add(backgroundImageView);
 
-                Border border = new Border(new BorderStroke(Color.BLACK,
-                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-                tile.setBorder(border);
-
-
                 if (worldElement != null) {
                     String elementUrl = worldElement.getImage();
+                    int toRotate = worldElement.getRotation();
+                    int numberOfAnimals = worldMap.numberOfAnimalsOnPosition(new Vector2d(i - 1, j - 1));
+                    if (numberOfAnimals > 0) {
+                        for (Animal animal : worldMap.getAnimalsAtPosition(new Vector2d(i - 1, j - 1))) {
+                            if (animal.isTracked(toTrack - 1)) {
+                                elementUrl = "trackedcow.png";
+                            }
+                        }
+
+                    }
+
+//                    boolean aLot = false;
+                    if (numberOfAnimals > 1) {
+                        toRotate = 0;
+                        elementUrl = elementUrl.substring(0, elementUrl.length() - 4);
+                        if (numberOfAnimals > 4) {
+//                            aLot = true;
+                            elementUrl = elementUrl + 5 + ".png";
+                        }
+                        else {
+                            elementUrl = elementUrl + numberOfAnimals + ".png";
+                        }
+                    }
+
                     ImageView overlayImageView = new ImageView(new Image(elementUrl));
                     overlayImageView.setFitWidth(cellDim - 1);
                     overlayImageView.setFitHeight(cellDim - 1);
+                    Rotate rotate = new Rotate(toRotate, (double) (cellDim - 1) / 2, (double) (cellDim - 1) / 2);
+                    overlayImageView.getTransforms().add(rotate);
+
+//                    if (aLot) {
+//                        overlayImageView.setFitWidth(cellDim / 1.5);
+//                        overlayImageView.setFitHeight(cellDim / 1.5);
+//                        tile.getChildren().add(overlayImageView);
+//                        tile.getChildren().add(new Text(String.valueOf(numberOfAnimals)));
+//                    }
+//                    else {
+//                        tile.getChildren().add(overlayImageView);
+//                    }
+
                     tile.getChildren().add(overlayImageView);
+
                 }
+                Border border = new Border(new BorderStroke(Color.BLACK,
+                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+                tile.setBorder(border);
                 mapGrid.add(tile, i, yDim - j);
             }
         }

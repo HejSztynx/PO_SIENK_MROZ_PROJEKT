@@ -21,6 +21,9 @@ public class Globe implements WorldMap, BoundsValidator {
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final Parameters parameters;
     private int day = 0;
+
+
+
     private Map<Vector2d, List<Animal>> animals = new HashMap<>();
     private Map<Genotype, Integer> mostPopular = new HashMap<>();
     private Set<Vector2d> emptySpacesJungle = new HashSet<>();
@@ -36,6 +39,10 @@ public class Globe implements WorldMap, BoundsValidator {
         initialGrassGenerator();
         initialAnimalMap();
         initialAnimalsGenerator();
+    }
+
+    public List<Animal> getAnimalsAtPosition(Vector2d position) {
+        return animals.get(position);
     }
 
     public int getAnimalCount() {
@@ -167,6 +174,11 @@ public class Globe implements WorldMap, BoundsValidator {
         int swampWidth = (int) (upperRight.getX() / sqrt(4));
         Biome jungle = new Biome(new Vector2d(startWidth, startHeight), new Vector2d(startWidth + swampWidth, startHeight + swampHeight));
         biomes.put("Swamp", jungle);
+    }
+
+    public int numberOfAnimalsOnPosition(Vector2d position) {
+        if (animals.get(position).isEmpty()) return 0;
+        return animals.get(position).size();
     }
 
     public String biomeColor(int x, int y) {

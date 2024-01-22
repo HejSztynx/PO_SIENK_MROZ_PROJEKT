@@ -6,4 +6,8 @@ public interface WorldElement {
     Vector2d getPosition();
 
     String getImage();
+
+    boolean isTracked(int n);
+
+    int getRotation();
 }
