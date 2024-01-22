@@ -1,6 +1,5 @@
 package agh.proj.gui;
 
-import agh.proj.model.Parameters;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,13 +28,13 @@ public class SimulationApp extends Application {
         stage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
 
-    public void openSecondView(agh.proj.model.Parameters parameters) {
+    public void openSecondView(agh.proj.model.Parameters parameters, String csvName) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
             BorderPane root = loader.load();
             SimulationRunner simulationRunnerController = loader.getController();
-            simulationRunnerController.setParameters(parameters);
+            simulationRunnerController.setParameters(parameters,csvName);
 
             Stage secondStage = new Stage();
             configureStage(secondStage, root);

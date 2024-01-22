@@ -14,11 +14,10 @@ public class Simulation implements Runnable {
     private CSVSimulationSaver csvSaver;
     private final ArrayList<MapChangeListener> subscribers = new ArrayList<>();
     private boolean pause = false;
-
-    public Simulation(Globe worldMap) throws IOException {
+    public Simulation(Globe worldMap,String csvName) throws IOException {
         this.worldMap = worldMap;
         mapVisualizer = new MapVisualizer(worldMap);
-        csvSaver=new CSVSimulationSaver("Simulation");
+        csvSaver=new CSVSimulationSaver(csvName);
     }
 
     public void setPause(boolean pause) {
