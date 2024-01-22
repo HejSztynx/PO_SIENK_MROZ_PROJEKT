@@ -32,10 +32,15 @@ public class Animal implements WorldElement {
         orientation = MapDirection.NORTH;
         currentOrientationIndex = -1;
     }
-    public String toSaveString(){
-        return dateOfBirth+":"+genotype.toString()
-                +":"+position.toString()+":"+orientation.toString()+":"+currentOrientationIndex+":"
-                +energy+":"+age+":"+noOfChildren+":"+numberOfDescendats+":"+numberOfEatedGrass;
+
+    public int getDateOfDeath(){
+        return dateOfBirth+age;
+    }
+    public String getSevingString(){
+        return  hisNumber+":"+dateOfBirth+":"+genotype.toString()+":"+position.toString()+":"
+                +orientation.toString()+":"+currentOrientationIndex+":"+energy+":"+age+":"+noOfChildren
+                +":"+numberOfEatedGrass+":"+numberOfDescendats;
+
     }
     public Animal(Vector2d position, int energy, int genoTypeLength, int hisNumber) {
         this(position, Genotype.randomGenotype(genoTypeLength), energy, 0, hisNumber);

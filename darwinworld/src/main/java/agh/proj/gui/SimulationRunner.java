@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Rotate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private HBox hBox;
 
-    public void initialize() {
+    public void initialize() throws IOException {
         if (parameters == null) {
             return;
         }
@@ -183,12 +184,14 @@ public class SimulationRunner implements MapChangeListener {
         childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
         descendantsTrack.setText(String.valueOf(animal.getNumberOfDescendats()));
         if (animal.getEnergy() == 0)
-            deathTrack.setText("DIED AT DAY:"+animal.getDateOfDeath());
+
+            deathTrack.setText("DIED:"+animal.getDateOfDeath());
+
         else
             deathTrack.setText("ALIVE");
     }
 
-    public void setParameters(Parameters parameters) {
+    public void setParameters(Parameters parameters) throws IOException {
         this.parameters = parameters;
         initialize();
     }

@@ -100,7 +100,7 @@
                     <TextField fx:id="descendantsTrack" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold">Life status</Label>
+                    <Label style="-fx-font-weight: bold">When it Died</Label>
                     <TextField fx:id="deathTrack" editable="false"/>
                 </VBox>
             </VBox>
