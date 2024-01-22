@@ -13,16 +13,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorInput;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Rotate;
@@ -186,7 +183,7 @@ public class SimulationRunner implements MapChangeListener {
         childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
         descendantsTrack.setText(String.valueOf(animal.getNumberOfDescendats()));
         if (animal.getEnergy() == 0)
-            deathTrack.setText("DEAD");
+            deathTrack.setText("DIED AT DAY:"+animal.getDateOfDeath());
         else
             deathTrack.setText("ALIVE");
     }
