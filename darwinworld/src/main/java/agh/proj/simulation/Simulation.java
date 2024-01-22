@@ -3,8 +3,10 @@ package agh.proj.simulation;
 import agh.proj.model.Globe;
 import agh.proj.model.GlobeAssistant;
 import agh.proj.model.interfaces.MapChangeListener;
+import agh.proj.model.util.CsvSaver;
 import agh.proj.model.util.MapVisualizer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Simulation implements Runnable {
@@ -61,6 +63,11 @@ public class Simulation implements Runnable {
             System.out.println(worldMap.mostPopularGenome() + ":Genom");
             System.out.println(mapVisualizer.draw());
             callSubscribers();
+            try {
+                CsvSaver.saveToCsv("Simulation", worldMap.getDay(), worldMap.getRecords());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         System.out.println("Sim End");
     }

@@ -32,9 +32,14 @@ public class Animal implements WorldElement {
         orientation = MapDirection.NORTH;
         currentOrientationIndex = -1;
     }
+    public String toSaveString(){
+        return dateOfBirth+":"+genotype.toString()
+                +":"+position.toString()+":"+orientation.toString()+":"+currentOrientationIndex+":"
+                +energy+":"+age+":"+noOfChildren+":"+numberOfDescendats+":"+numberOfEatedGrass;
+    }
+    public Animal(Vector2d position, int energy, int genoTypeLength, int hisNumber) {
+        this(position, Genotype.randomGenotype(genoTypeLength), energy, 0, hisNumber);
 
-    public Animal(Vector2d position, int energy, int genoTypeLength,int hisNumber) {
-        this(position, Genotype.randomGenotype(genoTypeLength), energy, 0,hisNumber);
     }
     public void setParents(Animal animalParent1,Animal animalParent2)
     {
@@ -52,7 +57,14 @@ public class Animal implements WorldElement {
         if(animalParent2!=null)
             animalParent2.getsDescendant();
     }
-    public static Animal breed(Animal animal1, Animal animal2, int breedEnergy, MutationVariant mutationVariant, int minMutation, int maxMutation,int hisNumber) {
+
+    public int getDateOfDeath(){ return  dateOfBirth+age;}
+    public int getCurrentOrientationIndex() {
+        return currentOrientationIndex;
+    }
+
+    public static Animal breed(Animal animal1, Animal animal2, int breedEnergy, MutationVariant mutationVariant, int minMutation, int maxMutation, int hisNumber) {
+
         animal1.getsChild();
         animal1.energy -= breedEnergy;
         animal2.getsChild();
@@ -94,6 +106,10 @@ public class Animal implements WorldElement {
         return orientation.toStringGood() + ":" + energy + ":" + age;
     }
 
+    public String getImage() {
+        return "cow.png";
+    }
+
     public void move(MoveValidator moveValidator) {
         currentOrientationIndex = age % genotype.getLength();
         int orientationChange = genotype.getRawGenotype()[currentOrientationIndex];
@@ -104,7 +120,6 @@ public class Animal implements WorldElement {
 
         age++;
         energy--;
-        //System.out.println(this);
     }
 
     public int getNumberOfEatedGrass() {
@@ -126,5 +141,13 @@ public class Animal implements WorldElement {
 
     public boolean canBreed(int breedNeededEnergy) {
         return energy >= breedNeededEnergy;
+    }
+
+    public boolean isTracked(int n) {
+        return n == hisNumber;
+    }
+
+    public int getRotation() {
+        return orientation.toNumber() * 45;
     }
 }

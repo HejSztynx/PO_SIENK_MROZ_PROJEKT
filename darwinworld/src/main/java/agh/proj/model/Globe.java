@@ -19,6 +19,9 @@ public class Globe implements WorldMap, BoundsValidator {
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final Parameters parameters;
     private int day = 0;
+
+
+
     private Map<Vector2d, List<Animal>> animals = new HashMap<>();
     private ArrayList<Animal> records=new ArrayList<>();
 
@@ -42,7 +45,10 @@ public class Globe implements WorldMap, BoundsValidator {
         initialGrassGenerator();
         initialAnimalMap();
         initialAnimalsGenerator();
+    }
 
+    public List<Animal> getAnimalsAtPosition(Vector2d position) {
+        return animals.get(position);
     }
 
     public int getAnimalCount() {
@@ -62,10 +68,15 @@ public class Globe implements WorldMap, BoundsValidator {
         return null;
     }
 
-    public void increseNumberOfAnimals(){
-        numberOfAllAnimals++;
+
+    public Animal getDeadAnimal(int n) {
+        for (Animal animal : deadAnimals) {
+            if (animal.getHisNumber() == n) return animal;
+        }
+        return null;
     }
-  
+
+
     private void emptySpacesInitialize() {
         for (int i = 0; i < upperRight.getY() + 1; i++) {
             for (int j = 0; j < upperRight.getX() + 1; j++) {
@@ -81,7 +92,7 @@ public class Globe implements WorldMap, BoundsValidator {
     public int allDead() {
         return numberOfAllAnimals-deadAnimals;
     }
-
+    public ArrayList<Animal> getRecords(){return (ArrayList<Animal>) records;}
     public void addDay() {
         day++;
     }
@@ -152,9 +163,13 @@ public class Globe implements WorldMap, BoundsValidator {
         Biome jungle = new Biome(new Vector2d(startWidth, startHeight), new Vector2d(startWidth + swampWidth, startHeight + swampHeight));
         biomes.put("Swamp", jungle);
     }
-    public int getNumberOfAllAnimals(){
-        return numberOfAllAnimals;
+
+    public int numberOfAnimalsOnPosition(Vector2d position) {
+        if (animals.get(position).isEmpty()) return 0;
+        return animals.get(position).size();
     }
+
+
     public String biomeColor(int x, int y) {
         String color;
         Vector2d position = new Vector2d(x, y);
@@ -169,6 +184,22 @@ public class Globe implements WorldMap, BoundsValidator {
         }
         else color = "lightyellow";
         return color;
+    }
+
+    public String biomeTexture(int x, int y) {
+        String url;
+        Vector2d position = new Vector2d(x, y);
+        if (biomes.containsKey("Jungle") && biomes.get("Jungle").boundsValidator(position)) {
+            url = "jungle.jpg";
+            if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
+                url = "purplejungle.jpg";
+            }
+        }
+        else if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
+            url = "purpledirt.jpg";
+        }
+        else url = "dirt.png";
+        return url;
     }
 
     private void initialGrassGenerator() {

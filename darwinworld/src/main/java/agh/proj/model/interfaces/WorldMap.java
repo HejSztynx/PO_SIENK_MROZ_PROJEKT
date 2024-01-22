@@ -5,6 +5,7 @@ import agh.proj.model.Genotype;
 import agh.proj.model.Vector2d;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface WorldMap extends MoveValidator {
     Vector2d moveValidator(Animal animal, Vector2d newPosition);
@@ -21,7 +22,11 @@ public interface WorldMap extends MoveValidator {
 
     String biomeColor(int x, int y);
 
+    String biomeTexture(int x, int y);
+
     Animal getAnimal(int n);
+
+    Animal getDeadAnimal(int n);
 
     int getAnimalCount();
 
@@ -36,4 +41,8 @@ public interface WorldMap extends MoveValidator {
     int avgAgeForDead();
 
     int getGrassCount();
+
+    int numberOfAnimalsOnPosition(Vector2d position);
+
+    List<Animal> getAnimalsAtPosition(Vector2d position);
 }

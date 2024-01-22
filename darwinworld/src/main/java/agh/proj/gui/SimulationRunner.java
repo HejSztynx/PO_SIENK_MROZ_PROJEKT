@@ -13,10 +13,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +62,7 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private TextField ageTrack;
     @FXML
-    private TextField genomeTrack;
+    private TextFlow genomeTrack;
     @FXML
     private TextField energyTrack;
     @FXML
@@ -67,6 +73,9 @@ public class SimulationRunner implements MapChangeListener {
     private TextField descendantsTrack;
     @FXML
     private TextField deathTrack;
+
+    @FXML
+    private HBox hBox;
 
     public void initialize() {
         if (parameters == null) {
@@ -105,11 +114,11 @@ public class SimulationRunner implements MapChangeListener {
             initializeMapStats();
 
             int animalCount = worldMap.getAnimalCount();
-            System.out.println(animalCount);
 
             list.getChildren().clear();
             for (int i = 1; i <= animalCount; i++) {
                 Label animalLabel = new Label("Animal " + i);
+                animalLabel.setMinWidth(80);
                 if (worldMap.getAnimal(i - 1) == null) {
                     animalLabel.setTextFill(Color.RED);
                 }
@@ -131,35 +140,52 @@ public class SimulationRunner implements MapChangeListener {
         if (selectedItem == null) return;
 
         tracked.setText(selectedItem);
+        tracked.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
         String number = selectedItem.split(" ")[1];
         toTrack = Integer.parseInt(number);
+        initializeAnimalList();
+        updateTracking();
+        Platform.runLater(this::drawMap);
     }
 
     private void updateTracking() {
         if (toTrack == 0) return;
         Animal animal = worldMap.getAnimal(toTrack - 1);
         if (animal == null) {
-            trackedDead();
-            return;
+            animal = worldMap.getDeadAnimal(toTrack - 1);
+            if (animal == null) {
+                return;
+            }
         }
         positionTrack.setText(String.valueOf(animal.getPosition()));
         ageTrack.setText(String.valueOf(animal.getAge()));
-        genomeTrack.setText(String.valueOf(animal.getGenotype()));
+
+        genomeTrack.getChildren().clear();
+        String genome = String.valueOf(animal.getGenotype());
+        int currentGen = animal.getCurrentOrientationIndex();
+        int toColor = 3 * currentGen + 1;
+        int i = 0;
+
+        for (char c : genome.toCharArray()) {
+            Text letter = new Text(String.valueOf(c));
+            letter.setStyle("-fx-font-weight: bold");
+            if (i == toColor) {
+                letter.setFill(Color.GREEN);
+            }
+            TextFlow textFlow = new TextFlow(letter);
+
+            genomeTrack.getChildren().add(textFlow);
+            i++;
+        }
+
         energyTrack.setText(String.valueOf(animal.getEnergy()));
         eatenGrassTrack.setText(String.valueOf(animal.getNumberOfEatedGrass()));
         childrenTrack.setText(String.valueOf(animal.getChildrenNo()));
         descendantsTrack.setText(String.valueOf(animal.getNumberOfDescendats()));
         if (animal.getEnergy() == 0)
-            deathTrack.setText("DEAD");
+            deathTrack.setText("DIED AT DAY:"+animal.getDateOfDeath());
         else
             deathTrack.setText("ALIVE");
-    }
-
-    private void trackedDead() {
-        positionTrack.setText("naprawie to");
-        ageTrack.setText("DEAD");
-        genomeTrack.setText("DEAD");
-        energyTrack.setText("DEAD");
     }
 
     public void setParameters(Parameters parameters) {
@@ -175,14 +201,14 @@ public class SimulationRunner implements MapChangeListener {
         }
         else if (value.equals("RESUME")) {
             se.pauseResumeThreads(false);
-            pauseResumeButton.setText("STOP");
+            pauseResumeButton.setText("PAUSE");
         }
     }
     @Override
     public void mapChanged() {
         Platform.runLater(this::drawMap);
         initializeAnimalList();
-        updateTracking();
+        Platform.runLater(this::updateTracking);
     }
 
     private void drawGrid() {
@@ -217,18 +243,62 @@ public class SimulationRunner implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(new Vector2d(i - 1, j - 1));
 
                 StackPane tile = new StackPane();
-                tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
 
+                String url = worldMap.biomeTexture(i - 1, j - 1);
+                ImageView backgroundImageView = new ImageView(new Image(url));
+                backgroundImageView.setFitWidth(cellDim - 1);
+                backgroundImageView.setFitHeight(cellDim - 1);
 
+                tile.getChildren().add(backgroundImageView);
+
+                if (worldElement != null) {
+                    String elementUrl = worldElement.getImage();
+                    int toRotate = worldElement.getRotation();
+                    int numberOfAnimals = worldMap.numberOfAnimalsOnPosition(new Vector2d(i - 1, j - 1));
+                    if (numberOfAnimals > 0) {
+                        for (Animal animal : worldMap.getAnimalsAtPosition(new Vector2d(i - 1, j - 1))) {
+                            if (animal.isTracked(toTrack - 1)) {
+                                elementUrl = "trackedcow.png";
+                            }
+                        }
+
+                    }
+
+//                    boolean aLot = false;
+                    if (numberOfAnimals > 1) {
+                        toRotate = 0;
+                        elementUrl = elementUrl.substring(0, elementUrl.length() - 4);
+                        if (numberOfAnimals > 4) {
+//                            aLot = true;
+                            elementUrl = elementUrl + 5 + ".png";
+                        }
+                        else {
+                            elementUrl = elementUrl + numberOfAnimals + ".png";
+                        }
+                    }
+
+                    ImageView overlayImageView = new ImageView(new Image(elementUrl));
+                    overlayImageView.setFitWidth(cellDim - 1);
+                    overlayImageView.setFitHeight(cellDim - 1);
+                    Rotate rotate = new Rotate(toRotate, (double) (cellDim - 1) / 2, (double) (cellDim - 1) / 2);
+                    overlayImageView.getTransforms().add(rotate);
+
+//                    if (aLot) {
+//                        overlayImageView.setFitWidth(cellDim / 1.5);
+//                        overlayImageView.setFitHeight(cellDim / 1.5);
+//                        tile.getChildren().add(overlayImageView);
+//                        tile.getChildren().add(new Text(String.valueOf(numberOfAnimals)));
+//                    }
+//                    else {
+//                        tile.getChildren().add(overlayImageView);
+//                    }
+
+                    tile.getChildren().add(overlayImageView);
+
+                }
                 Border border = new Border(new BorderStroke(Color.BLACK,
                         BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
                 tile.setBorder(border);
-
-
-                if (worldElement != null) {
-                    Text text = new Text(worldElement.toString());
-                    tile.getChildren().addAll(text);
-                }
                 mapGrid.add(tile, i, yDim - j);
             }
         }
