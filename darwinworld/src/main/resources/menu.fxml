@@ -154,6 +154,10 @@
                 </HBox>
             </VBox>
             <VBox alignment="CENTER" spacing="10">
+                <Label>Name of CSV file</Label>
+                <TextField fx:id="csvName"/>
+            </VBox >
+            <VBox alignment="CENTER" spacing="10">
                 <Label/>
                 <VBox spacing="10" alignment="CENTER">
                     <HBox spacing="10" alignment="CENTER">

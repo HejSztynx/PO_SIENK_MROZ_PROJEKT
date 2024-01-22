@@ -74,7 +74,7 @@ public class SimulationRunner implements MapChangeListener {
     private TextField descendantsTrack;
     @FXML
     private TextField deathTrack;
-
+    private String csvName;
     @FXML
     private HBox hBox;
 
@@ -89,7 +89,7 @@ public class SimulationRunner implements MapChangeListener {
         if (max > 14) cellDim = 30;
         Globe map = new Globe(parameters.getMapWidth(), parameters.getMapHeight(), parameters);
         worldMap = map;
-        Simulation simulation = new Simulation(map);
+        Simulation simulation = new Simulation(map,csvName);
         simulation.register(this);
         se = new SimulationEngine(new ArrayList<>(List.of(simulation)));
         try {
@@ -189,8 +189,9 @@ public class SimulationRunner implements MapChangeListener {
             deathTrack.setText("ALIVE");
     }
 
-    public void setParameters(Parameters parameters) throws IOException {
+    public void setParameters(Parameters parameters,String csvName) throws IOException {
         this.parameters = parameters;
+        this.csvName=csvName;
         initialize();
     }
 

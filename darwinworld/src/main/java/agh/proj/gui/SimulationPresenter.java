@@ -1,16 +1,16 @@
 package agh.proj.gui;
 
-import agh.proj.model.Globe;
 import agh.proj.model.Parameters;
 import agh.proj.model.util.CSVParameterSaver;
 import agh.proj.model.util.CSVReader;
-import agh.proj.simulation.Simulation;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,7 +58,8 @@ public class SimulationPresenter {
     private ComboBox<String> mutationVariant;
     @FXML
     private TextField genotypeLength;
-
+    @FXML
+    private TextField csvName;
     @FXML
     private ComboBox<String> presets;
 
@@ -72,7 +73,7 @@ public class SimulationPresenter {
         initializeCSVDirectory();
 
         initializePresets();
-
+        csvName.setText("Simulation");
         presets.setOnAction(event -> {
             String chosenPreset = presets.getValue();
             if (chosenPreset == null) return;
@@ -145,6 +146,7 @@ public class SimulationPresenter {
         mutationVariant.setValue(values.get(13));
         genotypeLength.setText(values.get(14));
         behaviorVariant.setValue(values.get(15));
+        csvName.setText("Simulation");
     }
 
     private void clearMenu() {
@@ -164,6 +166,7 @@ public class SimulationPresenter {
         mutationVariant.setValue("Fully Random");
         genotypeLength.setText("");
         behaviorVariant.setValue("Full Predestination");
+        csvName.setText("Simulation");
     }
 
     private void downloadValues() {
@@ -180,7 +183,7 @@ public class SimulationPresenter {
 
         Parameters parameters = checkParameters(values);
         if (parameters != null) {
-            mainApp.openSecondView(parameters);
+            mainApp.openSecondView(parameters,csvName.getText());
         } else System.out.println("NIE GIT");
     }
 
