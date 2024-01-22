@@ -121,6 +121,7 @@ public class SimulationRunner implements MapChangeListener {
             list.getChildren().clear();
             for (int i = 1; i <= animalCount; i++) {
                 Label animalLabel = new Label("Animal " + i);
+                animalLabel.setMinWidth(80);
                 if (worldMap.getAnimal(i - 1) == null) {
                     animalLabel.setTextFill(Color.RED);
                 }

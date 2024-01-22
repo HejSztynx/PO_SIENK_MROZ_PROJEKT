@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             minHeight="700.0" minWidth="500.0"
@@ -48,9 +49,15 @@
                     <TextField fx:id="averageChildren" editable="false"/>
                 </VBox>
             </VBox>
-            <VBox fx:id="list" alignment="CENTER" maxWidth="100">
-<!--                <ListView fx:id="animalList"/>-->
+            <VBox alignment="CENTER" spacing="20">
+                <ScrollPane minWidth="100">
+                    <VBox fx:id="list" alignment="CENTER" maxWidth="100">
+
+                    </VBox>
+                </ScrollPane>
             </VBox>
+
+
             <VBox spacing="20" alignment="CENTER">
                 <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
                 <GridPane fx:id = "mapGrid" gridLinesVisible="true" alignment="CENTER"/>
