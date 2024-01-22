@@ -28,7 +28,9 @@ public class Animal implements WorldElement {
         orientation = MapDirection.NORTH;
         currentOrientationIndex = -1;
     }
-
+    public int getDateOfDeath(){
+        return dateOfBirth+age;
+    }
     public Animal(Vector2d position, int energy, int genoTypeLength, int hisNumber) {
         this(position, Genotype.randomGenotype(genoTypeLength), energy, 0, hisNumber);
     }
