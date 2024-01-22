@@ -146,7 +146,7 @@ public class SimulationPresenter {
         mutationVariant.setValue(values.get(13));
         genotypeLength.setText(values.get(14));
         behaviorVariant.setValue(values.get(15));
-        csvName.setText("Simulation");
+
     }
 
     private void clearMenu() {
@@ -166,7 +166,7 @@ public class SimulationPresenter {
         mutationVariant.setValue("Fully Random");
         genotypeLength.setText("");
         behaviorVariant.setValue("Full Predestination");
-        csvName.setText("Simulation");
+
     }
 
     private void downloadValues() {
