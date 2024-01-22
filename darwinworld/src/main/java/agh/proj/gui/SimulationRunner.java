@@ -124,6 +124,9 @@ public class SimulationRunner implements MapChangeListener {
                 if (worldMap.getAnimal(i - 1) == null) {
                     animalLabel.setTextFill(Color.RED);
                 }
+                else if (worldMap.getAnimal(i - 1).getGenotype().equals(worldMap.mostPopularGenome())) {
+                    animalLabel.setTextFill(Color.LIGHTGREEN);
+                }
                 if (i == toTrack) {
                     animalLabel.setStyle("-fx-font-weight: bold");
                 }
