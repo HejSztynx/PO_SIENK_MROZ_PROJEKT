@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -238,11 +239,12 @@ public class SimulationRunner implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(new Vector2d(i - 1, j - 1));
 
                 StackPane tile = new StackPane();
-//                tile.setStyle("-fx-background-color: " + worldMap.biomeColor(i - 1, j - 1));
 
-                ImageView backgroundImageView = new ImageView(new Image("dirt.PNG"));
+                String url = worldMap.biomeTexture(i - 1, j - 1);
+                ImageView backgroundImageView = new ImageView(new Image(url));
                 backgroundImageView.setFitWidth(cellDim - 1);
                 backgroundImageView.setFitHeight(cellDim - 1);
+
                 tile.getChildren().add(backgroundImageView);
 
                 Border border = new Border(new BorderStroke(Color.BLACK,
@@ -251,9 +253,11 @@ public class SimulationRunner implements MapChangeListener {
 
 
                 if (worldElement != null) {
-                    Text text = new Text(worldElement.toString());
-                    text.setFill(Color.WHITE);
-                    tile.getChildren().addAll(text);
+                    String elementUrl = worldElement.getImage();
+                    ImageView overlayImageView = new ImageView(new Image(elementUrl));
+                    overlayImageView.setFitWidth(cellDim - 1);
+                    overlayImageView.setFitHeight(cellDim - 1);
+                    tile.getChildren().add(overlayImageView);
                 }
                 mapGrid.add(tile, i, yDim - j);
             }

@@ -185,6 +185,22 @@ public class Globe implements WorldMap, BoundsValidator {
         return color;
     }
 
+    public String biomeTexture(int x, int y) {
+        String url;
+        Vector2d position = new Vector2d(x, y);
+        if (biomes.containsKey("Jungle") && biomes.get("Jungle").boundsValidator(position)) {
+            url = "jungle.jpg";
+            if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
+                url = "purplejungle.jpg";
+            }
+        }
+        else if (biomes.containsKey("Swamp") && biomes.get("Swamp").boundsValidator(position)) {
+            url = "purpledirt.jpg";
+        }
+        else url = "dirt.png";
+        return url;
+    }
+
     private void initialGrassGenerator() {
         Random random = new Random();
         for (int i = 0; i < parameters.getInitialPlantsQuantity();i++ ) {

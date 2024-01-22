@@ -98,6 +98,10 @@ public class Animal implements WorldElement {
         return orientation.toStringGood() + ":" + energy + ":" + age;
     }
 
+    public String getImage() {
+        return "cow.png";
+    }
+
     public void move(MoveValidator moveValidator) {
         currentOrientationIndex = age % genotype.getLength();
         int orientationChange = genotype.getRawGenotype()[currentOrientationIndex];

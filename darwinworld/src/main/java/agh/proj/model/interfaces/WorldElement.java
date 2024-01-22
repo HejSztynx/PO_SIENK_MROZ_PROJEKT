@@ -4,4 +4,6 @@ import agh.proj.model.Vector2d;
 
 public interface WorldElement {
     Vector2d getPosition();
+
+    String getImage();
 }

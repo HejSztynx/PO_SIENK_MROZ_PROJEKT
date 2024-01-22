@@ -20,31 +20,31 @@
         <HBox spacing="20" alignment="CENTER">
             <VBox alignment="CENTER" spacing="20" maxWidth="100">
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="Number of animals"/>
+                    <Label style="-fx-font-weight: bold" text="Number of&#10;animals"/>
                     <TextField fx:id="animalNumber" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="Number of Grass"/>
+                    <Label style="-fx-font-weight: bold" text="Number of&#10;Grass"/>
                     <TextField fx:id="grassNumber" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="Number of free spaces"/>
+                    <Label style="-fx-font-weight: bold" text="Number of&#10;free spaces"/>
                     <TextField fx:id="freeSpaces" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="Most popular genotype"/>
+                    <Label style="-fx-font-weight: bold" text="Most popular&#10;genotype"/>
                     <TextField fx:id="popularGenotype" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="Average animal energy"/>
+                    <Label style="-fx-font-weight: bold" text="Average&#10;animal energy"/>
                     <TextField fx:id="averageEnergy" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="average animal lifespan"/>
+                    <Label style="-fx-font-weight: bold" text="average&#10;animal lifespan"/>
                     <TextField fx:id="averageLifeSpan" editable="false"/>
                 </VBox>
                 <VBox>
-                    <Label style="-fx-font-weight: bold" text="average number of children"/>
+                    <Label style="-fx-font-weight: bold" text="average&#10;number of children"/>
                     <TextField fx:id="averageChildren" editable="false"/>
                 </VBox>
             </VBox>

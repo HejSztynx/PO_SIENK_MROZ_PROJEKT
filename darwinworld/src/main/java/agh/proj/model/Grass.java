@@ -25,4 +25,9 @@ public class Grass implements WorldElement {
         else
             return "x";
     }
+
+    public String getImage() {
+        if (energy < 0) return "purplegrass.png";
+        return "grass.png";
+    }
 }
