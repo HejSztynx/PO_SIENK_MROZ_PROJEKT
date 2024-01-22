@@ -84,7 +84,7 @@ public class Globe implements WorldMap, BoundsValidator {
     public int allDead() {
         return records.size() - deadAnimals.size();
     }
-
+    public ArrayList<Animal> getRecords(){return (ArrayList<Animal>) records;}
     public void addDay() {
         day++;
     }

@@ -28,7 +28,11 @@ public class Animal implements WorldElement {
         orientation = MapDirection.NORTH;
         currentOrientationIndex = -1;
     }
-
+    public String toSaveString(){
+        return dateOfBirth+":"+genotype.toString()
+                +":"+position.toString()+":"+orientation.toString()+":"+currentOrientationIndex+":"
+                +energy+":"+age+":"+noOfChildren+":"+numberOfDescendats+":"+numberOfEatedGrass;
+    }
     public Animal(Vector2d position, int energy, int genoTypeLength, int hisNumber) {
         this(position, Genotype.randomGenotype(genoTypeLength), energy, 0, hisNumber);
     }
@@ -48,7 +52,7 @@ public class Animal implements WorldElement {
         if(animalParent2!=null)
             animalParent2.getsDescendant();
     }
-
+    public int getDateOfDeath(){ return  dateOfBirth+age;}
     public int getCurrentOrientationIndex() {
         return currentOrientationIndex;
     }
