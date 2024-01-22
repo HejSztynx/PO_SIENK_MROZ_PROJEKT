@@ -76,8 +76,6 @@ public class SimulationRunner implements MapChangeListener {
     @FXML
     private TextField deathTrack;
     private String csvName;
-    @FXML
-    private HBox hBox;
 
     public void initialize() throws IOException {
         if (parameters == null) {
@@ -210,6 +208,11 @@ public class SimulationRunner implements MapChangeListener {
             pauseResumeButton.setText("PAUSE");
         }
     }
+
+    synchronized public void simulationEndClicked() {
+        se.endThreads();
+    }
+
     @Override
     public void mapChanged() {
         Platform.runLater(this::drawMap);

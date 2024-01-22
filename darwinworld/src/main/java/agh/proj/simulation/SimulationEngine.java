@@ -30,4 +30,10 @@ public class SimulationEngine {
             simulation.setPause(pause);
         }
     }
+
+    synchronized public void endThreads() {
+        for (Simulation simulation : simulations) {
+            simulation.setToEnd(true);
+        }
+    }
 }

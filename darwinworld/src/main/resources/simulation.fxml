@@ -62,6 +62,7 @@
                 <Label style="-fx-font-size: 40px; -fx-font-weight: bold">RUNNING SIMULATION</Label>
                 <GridPane fx:id = "mapGrid" gridLinesVisible="true" alignment="CENTER"/>
                 <Button fx:id="pauseResumeButton" onAction="#simulationPauseResumeClicked" text="PAUSE"/>
+                <Button  onAction="#simulationEndClicked" text="END"/>
             </VBox>
             <VBox alignment="CENTER" spacing="20" maxWidth="100">
                 <VBox>
@@ -82,9 +83,6 @@
                 </VBox>
                 <VBox>
                     <Label style="-fx-font-weight: bold">Genome</Label>
-                    <HBox fx:id="hBox">
-
-                    </HBox>
                     <TextFlow fx:id="genomeTrack"/>
                 </VBox>
                 <VBox>

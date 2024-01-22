@@ -14,6 +14,7 @@ public class Simulation implements Runnable {
     private CSVSimulationSaver csvSaver;
     private final ArrayList<MapChangeListener> subscribers = new ArrayList<>();
     private boolean pause = false;
+    private boolean toEnd = false;
     public Simulation(Globe worldMap,String csvName) throws IOException {
         this.worldMap = worldMap;
         mapVisualizer = new MapVisualizer(worldMap);
@@ -22,6 +23,10 @@ public class Simulation implements Runnable {
 
     public void setPause(boolean pause) {
         this.pause = pause;
+    }
+
+    public void setToEnd(boolean val) {
+        toEnd = val;
     }
 
     public void register(MapChangeListener subscriber) {
@@ -41,6 +46,8 @@ public class Simulation implements Runnable {
                     throw new RuntimeException(e);
                 }
             }
+
+            if(toEnd) break;
 
             worldMap.dayCleaner();
             System.out.println(worldMap.allDead() + ":DeadAnimals");
