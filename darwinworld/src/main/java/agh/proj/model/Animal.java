@@ -109,6 +109,17 @@ public class Animal implements WorldElement {
         return "cow.png";
     }
 
+    public String getEnergyImage(int breedNeededEnergy) {
+        double hp = (double) energy /  breedNeededEnergy;
+        if (hp > 0.99) {
+            return "heart3.png";
+        }
+        if (hp > 0.49) {
+            return "heart2.png";
+        }
+        return "heart1.png";
+    }
+
     public void move(MoveValidator moveValidator) {
         currentOrientationIndex = age % genotype.getLength();
         int orientationChange = genotype.getRawGenotype()[currentOrientationIndex];
